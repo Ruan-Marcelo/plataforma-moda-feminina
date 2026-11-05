@@ -8,6 +8,6 @@ Na sessão anterior, `npm audit fix` foi interrompido após demora prolongada. N
 
 ## Limites da verificação
 
-Build e testes unitários não validam OAuth real, migrations em PostgreSQL, exclusão de fotografias no fornecedor nem jornadas em navegador. O Playwright teve seus testes listados, mas ainda não executados. A validação sintática do Prisma não equivale à aplicação de migrations.
+Build e testes unitários não validam OAuth real, migrations em PostgreSQL nem exclusão de fotografias no fornecedor. Os 6 smoke tests Playwright passaram na retomada local sem banco, cobrindo home, menu mobile e indisponibilidade do catálogo; não validam autenticação ou persistência. A validação sintática do Prisma não equivale à aplicação de migrations.
 
 Controles iniciais: TypeScript strict, validação com Zod, autorização server-side, ausência de credenciais no código, MIME sniffing para uploads e rate limiting local no endpoint do provador (3 solicitações por IP a cada 10 minutos, com limite de corpo de 9 MiB). O limite em memória é apenas uma camada da aplicação; produção ainda precisa de rate limiting distribuído, CDN/WAF, storage isolado, logs sem imagens e revisão ASVS.

@@ -5,7 +5,7 @@ test("home apresenta navegação pública e chamada para o catálogo", async ({ 
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Você é essência, exale." })).toBeVisible();
   await expect(page.getByRole("link", { name: "Explorar catálogo" })).toHaveAttribute("href", "/catalogo");
-  await expect(page.getByRole("link", { name: "Provador virtual" })).toHaveAttribute("href", "/provador");
+  await expect(page.getByRole("link", { name: "Conhecer o provador virtual", exact: true })).toHaveAttribute("href", "/provador");
 });
 
 test("menu mobile abre e fecha com controle acessível", async ({ page }) => {

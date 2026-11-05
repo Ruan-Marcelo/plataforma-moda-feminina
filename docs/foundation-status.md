@@ -28,7 +28,7 @@ O cache `.npm-cache/` permanece dentro do projeto e é ignorado pelo Git, assim 
 - Último lint executado passou sem erros, com 6 avisos de `<img>`.
 - 8 suítes e 19 testes unitários passaram na retomada de 2026-11-05. Esses testes não comprovam o comportamento da galeria e dos seletores em navegador.
 - Build de produção passou novamente na retomada de 2026-11-05 (Next.js 15.5.28), sem banco ou integrações externas configurados. Isso não valida os fluxos reais dessas integrações.
-- Playwright foi configurado com 6 smoke tests públicos para desktop e mobile; a execução depende dos navegadores instalados no ambiente.
+- Chromium instalado e 6 smoke tests públicos passaram em desktop e mobile contra o servidor local de desenvolvimento, ainda sem banco configurado. O seletor do link do provador foi ajustado para o CTA visível nas duas larguras.
 - A última auditoria online reportou 14 vulnerabilidades (8 moderadas, 4 altas e 2 críticas). O resultado zero de auditorias offline não invalida esse relatório. Correção pendente antes da publicação.
 - Os dois diretórios de staging conhecidos foram removidos. Essa checagem não comprova ausência de caches e logs de ferramentas fora do projeto.
 
@@ -44,7 +44,7 @@ O cache `.npm-cache/` permanece dentro do projeto e é ignorado pelo Git, assim 
 
 ## Ainda não considerado concluído
 
-- Execução dos testes E2E com navegadores Playwright instalados.
+- Testes E2E com PostgreSQL conectado, login administrativo e gravação real de produtos/imagens.
 - Auditoria manual completa de acessibilidade em leitores de tela e navegadores reais.
 - Fluxos completos de verificação/recuperação de e-mail com provedor de envio configurado.
 - Edição de categorias/coleções já cadastradas.
