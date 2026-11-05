@@ -1,0 +1,34 @@
+/* RUAN MARCELO RAMACIOTI LUZ */
+:root {
+  --belin-wine: #8d263b;
+  --belin-wine-rgb: 141 38 59;
+  --belin-wine-dark: #641a2a;
+  --belin-wine-dark-rgb: 100 26 42;
+  --belin-cream: #fff0d0;
+  --belin-cream-rgb: 255 240 208;
+  --belin-white: #ffffff;
+  --belin-white-rgb: 255 255 255;
+  --belin-nude: #e8d8c4;
+  --belin-nude-rgb: 232 216 196;
+  --belin-ink: #2a2020;
+  --belin-ink-rgb: 42 32 32;
+  --belin-muted: #6d5e5e;
+  --belin-success: #246b45;
+  --belin-danger: #9b2638;
+  --belin-radius-sm: 0.5rem;
+  --belin-radius-md: 0.875rem;
+  --belin-radius-lg: 1.5rem;
+  --belin-shadow-soft: 0 10px 30px rgba(100, 26, 42, 0.08);
+  --belin-space-section: clamp(4rem, 9vw, 8rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

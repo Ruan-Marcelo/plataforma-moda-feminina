@@ -1,0 +1,23 @@
+// RUAN MARCELO RAMACIOTI LUZ
+import Link from "next/link";
+import { storeConfig } from "@/config/store";
+
+export const metadata = { title: "Privacidade", description: "Informações sobre privacidade e tratamento de dados na BÉLIN." };
+
+export default function PrivacyPage() {
+  return (
+    <main className="min-h-screen bg-cream px-5 py-12 md:px-8 md:py-20">
+      <div className="mx-auto max-w-3xl">
+        <Link href="/" className="text-sm text-wine">← Voltar para {storeConfig.name}</Link>
+        <p className="mt-16 text-xs uppercase tracking-[0.3em] text-wine">Privacidade</p>
+        <h1 className="mt-4 font-display text-5xl text-wine md:text-7xl">Sua privacidade importa.</h1>
+        <p className="mt-6 leading-7 text-stone-700">Esta página apresenta a estrutura de tratamento de dados prevista para a vitrine BÉLIN. Ela ainda precisa ser revisada e aprovada pelo responsável jurídico antes da publicação.</p>
+        <div className="mt-10 space-y-8 rounded-2xl border border-nude bg-white p-6 md:p-8">
+          <section><h2 className="font-display text-3xl text-wine">Dados de navegação</h2><p className="mt-3 text-sm leading-6 text-stone-600">A aplicação pode registrar eventos técnicos e analíticos somente conforme a preferência de cookies escolhida. O catálogo não exige cadastro para ser consultado.</p></section>
+          <section><h2 className="font-display text-3xl text-wine">Provador virtual</h2><p className="mt-3 text-sm leading-6 text-stone-600">Fotografias pessoais só devem ser processadas quando o provedor real estiver configurado, com finalidade, retenção, exclusão e transferência internacional documentadas. O ambiente atual não gera resultados.</p></section>
+          <section><h2 className="font-display text-3xl text-wine">Contato</h2><p className="mt-3 text-sm leading-6 text-stone-600">Para dúvidas ou solicitações relacionadas a dados pessoais, o canal oficial deverá ser informado pela loja antes da publicação.</p></section>
+        </div>
+      </div>
+    </main>
+  );
+}
