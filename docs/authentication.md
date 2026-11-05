@@ -9,3 +9,5 @@ Para provisionar o primeiro administrador, configure ADMIN_EMAIL, ADMIN_PASSWORD
 No desenvolvimento local, esse comando carrega o arquivo `.env` explicitamente. Mantenha o arquivo privado e confirme a conexão de destino antes de executar, pois uma conta existente com o mesmo e-mail terá senha e papel atualizados.
 
 Sem AUTH_SECRET, a rota Auth.js permanece indisponivel e retorna erro de configuracao. Gere um segredo aleatorio com pelo menos 32 caracteres; nunca o versione.
+
+Após autenticação bem-sucedida por credenciais, `/login` encaminha para `/admin` na mesma origem do navegador. Isso preserva o cookie mesmo quando o ambiente local é acessado por localhost ou 127.0.0.1. A autorização do painel continua sendo feita no servidor, com papel ADMIN/EDITOR; falhas de conexão encerram o estado de carregamento e exibem erro no formulário.
