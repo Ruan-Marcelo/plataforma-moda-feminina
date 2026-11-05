@@ -1,0 +1,2 @@
+// RUAN MARCELO RAMACIOTI LUZ
+import { describe, expect, it } from "vitest"; import { createWhatsAppLink } from "@/lib/whatsapp"; describe("createWhatsAppLink", () => { it("gera uma mensagem codificada", () => { const link = createWhatsAppLink("5511999999999", "Vestido Aurora", "https://example.com/produto/aurora"); expect(link).toContain("https://wa.me/5511999999999?text="); expect(decodeURIComponent(link)).toContain("Vestido Aurora"); }); it("rejeita número inválido", () => expect(() => createWhatsAppLink("123")).toThrow()); });
