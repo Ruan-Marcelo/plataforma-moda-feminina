@@ -4,6 +4,8 @@ Copie .env.example para .env no desenvolvimento. Nunca versione .env, segredos O
 
 Obrigatorias para dados: DATABASE_URL.
 
+`STORE_SHOW_PRICES` aceita `true` (padrão) ou `false` e controla a exibição de preços nos detalhes e cards. `STORE_WHATSAPP_NUMBER` deve conter somente dígitos com código do país; sem configuração real, o botão de interesse fica desabilitado.
+
 Obrigatoria para Auth.js quando a autenticacao estiver ativa: AUTH_SECRET com pelo menos 32 caracteres.
 
 OAuth opcional: AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_APPLE_ID e AUTH_APPLE_SECRET. Configure somente callbacks e credenciais criados nos consoles oficiais.

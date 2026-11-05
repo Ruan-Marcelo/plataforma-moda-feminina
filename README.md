@@ -21,6 +21,8 @@ O estado verificado e as pendências reais estão em [docs/foundation-status.md]
 
 O funcionamento do catálogo está descrito em [docs/catalog.md](docs/catalog.md).
 
+A página da peça, a seleção de variantes e o encaminhamento ao provador/WhatsApp estão em [docs/product-details.md](docs/product-details.md).
+
 A configuração deste computador, os comandos para iniciar e os limites das integrações estão em [docs/local-development.md](docs/local-development.md).
 
 O projeto usa UTF-8 e finais de linha LF para preservar acentos e reduzir diferenças entre computadores; veja `.editorconfig` e `.gitattributes`.

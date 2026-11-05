@@ -1,6 +1,6 @@
 # Plano de commits para continuar o projeto em outro computador
 
-Este documento organiza uma sequência para publicar o projeto no GitHub e continuar o desenvolvimento. O repositório local foi inicializado em `main` em 2026-11-05, seguindo as nove etapas abaixo. Nenhum remoto foi configurado e nenhum push foi realizado.
+Este documento organiza uma sequência para publicar o projeto no GitHub e continuar o desenvolvimento. O repositório local foi inicializado em `main` em 2026-11-05, seguindo as nove etapas abaixo. O remoto `origin` foi configurado a pedido do usuário para `https://github.com/Ruan-Marcelo/plataforma-moda-feminina.git`. Confirme a sincronização com `git status -sb` e `git log origin/main`.
 
 Os commits organizam por tema um código que já existia integrado. Não representam etapas históricas de desenvolvimento nem garantem que cada commit intermediário compile isoladamente; a validação se refere ao conjunto final. Os originais de `Designer/` permanecem locais; somente os dois assets oficiais usados pelo site em `public/brand/` entram no histórico.
 

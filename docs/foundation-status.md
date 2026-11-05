@@ -6,11 +6,19 @@ Atualizado após o build de produção validado localmente.
 
 Em 2026-11-05, a instalação foi restaurada com `npm ci --cache .npm-cache --no-audit --no-fund` (474 pacotes), após repetir fora do sandbox a tentativa bloqueada por permissões/rede. O Prisma Client 6.19.3 foi gerado. Typecheck passou, lint passou com 6 avisos de `<img>` e as 8 suítes unitárias passaram com 19 testes. A auditoria online voltou a reportar 14 vulnerabilidades (8 moderadas, 4 altas e 2 críticas); não foi executado `npm audit fix` nesta retomada.
 
-O Git local foi inicializado em `main`, com commits organizados conforme `docs/transfer-commit-plan.md`. Não há remoto configurado nem publicação no GitHub. Os originais de `Designer/` ficam ignorados, e os dois assets oficiais usados pelo site são versionados em `public/brand/`.
+O Git local foi inicializado em `main`, com commits organizados conforme `docs/transfer-commit-plan.md`. A pedido do usuário, `origin` aponta agora para `https://github.com/Ruan-Marcelo/plataforma-moda-feminina.git`. Os originais de `Designer/` ficam ignorados, e os dois assets oficiais usados pelo site são versionados em `public/brand/`.
 
 Na configuração local posterior, o PostgreSQL 18.6 foi conectado usando o `.env` privado, o banco separado `belin_local` foi criado e as quatro migrations foram aplicadas sem alterar outros bancos. Administrador provisionado e login, papel ADMIN, painel, API protegida e CSV verificados no navegador. O catálogo está conectado e vazio, sem seed. O adaptador local de imagens foi testado pelo painel com um rascunho temporário e uma imagem oficial da marca; upload, leitura dos bytes, exibição e exclusão passaram, e o rascunho foi removido. Não há fotografias pessoais nesses testes.
 
 O cache `.npm-cache/` permanece dentro do projeto e é ignorado pelo Git, assim como `node_modules/` e relatórios Playwright. No outro computador, instalar dependências a partir do lockfile em vez de transportar `node_modules`.
+
+## Etapa de detalhes das peças
+
+A página de detalhes recebeu galeria responsiva com controles, teclado e gesto horizontal, seleção consistente de variante, preços configuráveis e relacionados do banco. WhatsApp e provador revalidam os identificadores e a disponibilidade no servidor. O provador nesta etapa é somente navegação/confirmacão, sem envio de fotografias ou geração por IA. O login foi corrigido para entrar diretamente em `/admin` na mesma origem.
+
+A pedido do usuário, três exemplos identificados como demonstração foram salvos em `belin_local`, com ilustrações SVG e preços demonstrativos. Isso substitui o estado vazio da etapa inicial; não representa catálogo comercial real.
+
+Passaram typecheck, lint (4 avisos preexistentes de `<img>`), 28 testes unitários e 14 cenários Playwright (desktop/mobile, preços visíveis/ocultos, variantes, links e login). Os testes de produto usaram PostgreSQL temporário `belin_product_e2e_*`, removido ao final, preservando o banco local e seus exemplos. Detalhes em `docs/product-details.md`.
 
 ## Verificado
 

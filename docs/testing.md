@@ -1,5 +1,7 @@
 # Testes
 
+Na etapa de detalhes das peças, passaram 28 testes unitários e 14 cenários Playwright em banco PostgreSQL separado, incluindo galeria, variantes, links, preços e redirecionamento ao painel. Veja os requisitos de isolamento e execução em `docs/product-details.md`.
+
 - npm run typecheck
 - npm run lint
 - npm test
