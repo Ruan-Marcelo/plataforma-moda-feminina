@@ -5,7 +5,7 @@
 - Dependências restauradas pelo `package-lock.json` com `npm ci` e Prisma Client gerado.
 - PostgreSQL 18 em `localhost:5432`; banco separado `belin_local` criado e quatro migrations aplicadas com `npx prisma migrate deploy`.
 - Administrador provisionado com os valores reais do `.env`; login, papel ADMIN, painel, API protegida e exportação CSV verificados no navegador.
-- Catálogo conectado ao PostgreSQL e vazio. Nenhum seed de catálogo foi executado.
+- Catálogo conectado ao PostgreSQL. Na etapa de detalhes das peças, três exemplos demonstrativos foram gravados a pedido do usuário, com ilustrações identificadas e preços de exemplo.
 - Chromium instalado para Playwright.
 
 ## Iniciar
