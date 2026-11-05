@@ -6,4 +6,6 @@ Google e Apple so entram na lista de provedores quando AUTH_GOOGLE_ID/AUTH_GOOGL
 
 Para provisionar o primeiro administrador, configure ADMIN_EMAIL, ADMIN_PASSWORD e ADMIN_PROVISION_CONFIRM=YES somente no ambiente do servidor e execute npm run db:provision-admin. O comando exige senha com pelo menos 12 caracteres e nao imprime a senha.
 
+No desenvolvimento local, esse comando carrega o arquivo `.env` explicitamente. Mantenha o arquivo privado e confirme a conexão de destino antes de executar, pois uma conta existente com o mesmo e-mail terá senha e papel atualizados.
+
 Sem AUTH_SECRET, a rota Auth.js permanece indisponivel e retorna erro de configuracao. Gere um segredo aleatorio com pelo menos 32 caracteres; nunca o versione.

@@ -16,7 +16,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "db:provision-admin": "tsx prisma/provision-admin.ts"
+    "db:provision-admin": "node --env-file=.env --import tsx prisma/provision-admin.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1162.0",
