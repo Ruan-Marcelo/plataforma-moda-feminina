@@ -1,37 +1,58 @@
-// RUAN MARCELO RAMACIOTI LUZ
 import { NextResponse } from "next/server";
-import { virtualTryOnRequestSchema, validateVirtualTryOnImage } from "@/features/virtual-fitting/validation";
+import { validateVirtualTryOnImage } from "@/features/virtual-fitting/validation";
+import { fittingSubmissionSchema, fittingResultSchema, hasProviderImage } from "@/features/virtual-fitting/contracts";
 import { findPublishedProductById } from "@/features/products/repository";
+import { findAvailableVariant } from "@/features/products/selection";
 import { env } from "@/lib/env";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
 import { FashnVirtualTryOnProvider } from "@/features/virtual-fitting/fashn-provider";
-import { VirtualTryOnNotConfiguredError, VirtualTryOnProviderError, VirtualTryOnTimeoutError } from "@/features/virtual-fitting/types";
+import { VirtualTryOnProviderError, VirtualTryOnTimeoutError } from "@/features/virtual-fitting/types";
+
 export const runtime = "nodejs";
+function reply(data: unknown, status: number, headers: Record<string, string> = {}) {
+  return NextResponse.json(data, { status, headers: { "Cache-Control": "no-store", ...headers } });
+}
+
 export async function POST(request: Request) {
-  if (!env.DATABASE_URL || !env.FASHN_API_KEY) return NextResponse.json({ error: "not_configured" }, { status: 503 });
-  const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > 9 * 1024 * 1024) return NextResponse.json({ error: "request_too_large" }, { status: 413 });
+  if (!env.DATABASE_URL || !env.FASHN_API_KEY) return reply({ error: "not_configured" }, 503);
+  if (!env.VIRTUAL_FITTING_ENABLED) return reply({ error: "not_enabled" }, 503);
+  if (Number(request.headers.get("content-length") ?? 0) > 9 * 1024 * 1024) return reply({ error: "request_too_large" }, 413);
+  const form = await request.formData().catch(() => null);
+  if (form?.get("consent") !== "true") return reply({ error: "consent_required" }, 400);
+  const parsed = fittingSubmissionSchema.safeParse(Object.fromEntries(["productId", "variantId", "requestId", "consent", "consentVersion"].map(key => [key, form.getAll(key).length === 1 ? form.get(key) : undefined])));
+  const image = form.get("image");
+  if (!parsed.success || !(image instanceof File) || form.getAll("image").length !== 1) return reply({ error: "invalid_request" }, 400);
+  try { await validateVirtualTryOnImage(image); } catch { return reply({ error: "invalid_image" }, 400); }
   const source = request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim() ?? "unknown";
   const rate = consumeRateLimit(`virtual-fitting:${source}`, 3, 10 * 60 * 1000);
-  if (!rate.allowed) return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } });
-  const formData = await request.formData().catch(() => null);
-  const parsed = virtualTryOnRequestSchema.safeParse({ productId: formData?.get("productId") });
-  const image = formData?.get("image");
-  if (!parsed.success || !(image instanceof File)) return NextResponse.json({ error: "invalid_request" }, { status: 400 });
-  try { await validateVirtualTryOnImage(image); } catch { return NextResponse.json({ error: "invalid_image" }, { status: 400 }); }
+  if (!rate.allowed) return reply({ error: "rate_limited" }, 429, { "Retry-After": String(rate.retryAfterSeconds) });
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  request.signal.addEventListener("abort", abort, { once: true });
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
+    if (request.signal.aborted) return reply({ error: "cancelled" }, 499);
     const product = await findPublishedProductById(parsed.data.productId);
-    const garmentImageUrl = product?.images[0]?.url;
-    if (!garmentImageUrl) return NextResponse.json({ error: "product_image_unavailable" }, { status: 422 });
+    const variant = product ? findAvailableVariant(product.variants, parsed.data.variantId) : null;
+    if (!product || !variant) return reply({ error: "variant_unavailable" }, 409);
+    const garmentImageUrl = product.images[0]?.url;
+    if (!garmentImageUrl || !hasProviderImage(garmentImageUrl)) return reply({ error: "product_image_unavailable" }, 422);
+    const duplicate = consumeRateLimit(`virtual-fitting-request:${parsed.data.requestId}`, 1, 10 * 60 * 1000);
+    if (!duplicate.allowed) return reply({ error: "duplicate_request" }, 409);
+    timeout = setTimeout(abort, 70_000);
     const provider = new FashnVirtualTryOnProvider();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 70_000);
-    const result = await provider.generate({ productId: parsed.data.productId, image, garmentImageUrl }, controller.signal).finally(() => clearTimeout(timeout));
-    return NextResponse.json(result);
+    const result = await provider.generate({ productId: product.id, variantId: variant.id, image, garmentImageUrl }, controller.signal);
+    if (request.signal.aborted) return reply({ error: "cancelled" }, 499);
+    const validated = fittingResultSchema.safeParse(result);
+    if (!validated.success) return reply({ error: "provider_unavailable" }, 502);
+    return reply(validated.data, 200);
   } catch (error) {
-    if (error instanceof VirtualTryOnNotConfiguredError) return NextResponse.json({ error: "not_configured" }, { status: 503 });
-    if (error instanceof VirtualTryOnTimeoutError || error instanceof Error && error.name === "AbortError") return NextResponse.json({ error: "timeout" }, { status: 504 });
-    if (error instanceof VirtualTryOnProviderError) return NextResponse.json({ error: "provider_unavailable" }, { status: 502 });
-    return NextResponse.json({ error: "try_on_unavailable" }, { status: 503 });
+    if (request.signal.aborted) return reply({ error: "cancelled" }, 499);
+    if (error instanceof VirtualTryOnTimeoutError || (error instanceof Error && error.name === "AbortError")) return reply({ error: "timeout" }, 504);
+    if (error instanceof VirtualTryOnProviderError) return reply({ error: "provider_unavailable" }, 502);
+    return reply({ error: "provider_unavailable" }, 503);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+    request.signal.removeEventListener("abort", abort);
   }
 }

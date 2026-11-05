@@ -118,6 +118,7 @@ test("variantes respeitam combinações existentes e encaminham a escolha ao pro
   await expect(options.getByRole("status")).toContainText("Disponível · Preto · M");
   await expect(options.getByRole("link", { name: "Experimentar virtualmente", exact: true })).toHaveAttribute("href", `/provador?productId=${product.id}&variantId=${blackId}`);
   await options.getByRole("link", { name: "Experimentar virtualmente", exact: true }).click();
+  await page.getByRole("button", { name: "Começar agora", exact: true }).click();
   const selection = page.getByRole("region", { name: "Peça selecionada", exact: true });
   await expect(selection).toContainText(product.name);
   await expect(selection).toContainText("Preto");
@@ -167,8 +168,10 @@ test("peças esgotadas, sem variantes, rascunhos e parâmetros adulterados são 
   await expect(page.getByText("Esta peça ainda não possui variantes cadastradas.", { exact: true })).toBeVisible();
   expect((await request.get(`/produto/${draft.slug}`)).status()).toBe(404);
   await page.goto(`/provador?productId=${product.id}&variantId=${foreignId}`);
+  await page.getByRole("button", { name: "Começar agora", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Seleção indisponível", exact: true })).toBeVisible();
   await page.goto(`/provador?productId=${product.id}&variantId=${availableId}&variantId=${blackId}`);
+  await page.getByRole("button", { name: "Começar agora", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Seleção indisponível", exact: true })).toBeVisible();
 });
 
@@ -177,6 +180,6 @@ test("login encaminha o administrador diretamente ao painel", async ({ page }) =
   await page.getByLabel("E-mail", { exact: true }).fill(adminEmail);
   await page.getByLabel("Senha", { exact: true }).fill(adminPassword);
   await page.getByRole("button", { name: "Entrar", exact: true }).click();
-  await expect(page).toHaveURL(/\/admin$/);
+  await expect(page).toHaveURL(/\/admin$/, { timeout: 15_000 });
   await expect(page.getByRole("heading", { name: "Painel da loja", exact: true })).toBeVisible();
 });

@@ -1,45 +1,39 @@
-// RUAN MARCELO RAMACIOTI LUZ
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useId, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
-type Props = { productId: string };
-type Status = "idle" | "uploading" | "success" | "error";
+type Props = {
+  previewUrl: string | null;
+  disabled: boolean;
+  checking: boolean;
+  onSelect: (file: File | undefined) => void;
+  onRemove: () => void;
+};
 
-const maxFileSize = 8 * 1024 * 1024;
-const acceptedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
-
-export function VirtualTryOnUpload({ productId }: Props) {
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status>("idle");
-  const [message, setMessage] = useState("");
-
-  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
-
-  function selectFile(selected: File | undefined) {
-    setResultUrl(null);
-    if (!selected) return;
-    if (!acceptedTypes.has(selected.type) || selected.size <= 0 || selected.size > maxFileSize) {
-      setFile(null); setPreviewUrl(null); setStatus("error"); setMessage("Escolha uma imagem JPG, PNG ou WebP de até 8 MB."); return;
-    }
-    setFile(selected); setPreviewUrl(URL.createObjectURL(selected)); setStatus("idle"); setMessage("");
-  }
-
-  async function submit() {
-    if (!file) { setStatus("error"); setMessage("Selecione uma fotografia antes de continuar."); return; }
-    setStatus("uploading"); setMessage("Enviando sua fotografia com segurança…");
-    const body = new FormData(); body.set("productId", productId); body.set("image", file);
-    try {
-      const response = await fetch("/api/virtual-fitting", { method: "POST", body });
-      const data: unknown = await response.json().catch(() => null);
-      if (!response.ok || !data || typeof data !== "object" || !("resultUrl" in data) || typeof data.resultUrl !== "string") {
-        setStatus("error"); setMessage(response.status === 503 ? "O provador ainda não está disponível neste ambiente." : "Não foi possível processar esta fotografia. Tente outra imagem."); return;
-      }
-      setResultUrl(data.resultUrl); setStatus("success"); setMessage("Simulação pronta. O resultado é apenas uma referência visual.");
-    } catch { setStatus("error"); setMessage("Não foi possível conectar ao provador. Tente novamente."); }
-  }
-
-  return <section className="mt-10 rounded-2xl border border-nude bg-white p-5" aria-labelledby="try-on-title"><h2 id="try-on-title" className="font-display text-3xl text-wine">Experimentar virtualmente</h2><p className="mt-3 text-sm leading-6 text-stone-600">Envie uma foto nítida, com boa iluminação e o corpo visível. A imagem será validada no servidor e usada somente para esta solicitação.</p><label className="mt-5 block text-sm font-medium" htmlFor="try-on-image">Sua fotografia<input id="try-on-image" className="mt-2 block min-h-11 w-full rounded border border-nude p-2 text-sm" type="file" accept="image/jpeg,image/png,image/webp" capture="user" onChange={(event) => selectFile(event.target.files?.[0])} /></label>{previewUrl ? <img src={previewUrl} alt="Pré-visualização da fotografia selecionada" className="mt-4 max-h-72 w-full rounded object-contain" /> : null}<button type="button" className="mt-5 min-h-11 rounded-full bg-wine px-5 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50" onClick={submit} disabled={status === "uploading" || !file}>{status === "uploading" ? "Processando…" : "Iniciar experimentação"}</button><p className="mt-4 text-sm text-stone-600" aria-live="polite">{message}</p>{status === "success" && resultUrl ? <div className="mt-5 border-t border-nude pt-5"><h3 className="font-display text-2xl text-wine">Resultado da experimentação</h3><img src={resultUrl} alt="Resultado da simulação virtual" className="mt-3 max-h-96 w-full rounded object-contain" /><p className="mt-3 text-xs text-stone-500">A experimentação é uma simulação visual e não garante tamanho, caimento ou aparência física exata.</p></div> : null}</section>;
+export function VirtualTryOnUpload({ previewUrl, disabled, checking, onSelect, onRemove }: Props) {
+  const gallery = useRef<HTMLInputElement>(null);
+  const camera = useRef<HTMLInputElement>(null);
+  const hintId = useId();
+  return <div>
+    <p id={hintId} className="text-sm leading-7 text-muted">JPG, PNG ou WebP, com até 8 MB. A pré-visualização fica nesta sessão e não é enviada ao selecionar o arquivo.</p>
+    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <Button type="button" variant="secondary" disabled={disabled || checking} onClick={() => gallery.current?.click()}>Escolher na galeria</Button>
+      <Button type="button" variant="secondary" disabled={disabled || checking} onClick={() => camera.current?.click()}>Usar câmera, se disponível</Button>
+    </div>
+    <input ref={gallery} aria-label="Fotografia da galeria" aria-describedby={hintId} className="sr-only" tabIndex={-1} type="file" accept="image/jpeg,image/png,image/webp" disabled={disabled || checking} onChange={event => { onSelect(event.target.files?.[0]); event.target.value = ""; }} />
+    <input ref={camera} aria-label="Fotografia pela câmera" aria-describedby={hintId} className="sr-only" tabIndex={-1} type="file" accept="image/jpeg,image/png,image/webp" capture="user" disabled={disabled || checking} onChange={event => { onSelect(event.target.files?.[0]); event.target.value = ""; }} />
+    <p className="mt-3 text-xs leading-5 text-muted">A câmera depende do aparelho e do navegador. Caso ela não esteja disponível, escolha uma foto da galeria.</p>
+    {checking ? <p className="mt-4 text-sm text-wine" role="status">Conferindo a fotografia neste dispositivo…</p> : null}
+    {previewUrl ? <figure className="mt-6 rounded-belin-lg border border-nude bg-cream p-3">
+      <Image src={previewUrl} alt="Pré-visualização da sua fotografia" width={600} height={800} unoptimized referrerPolicy="no-referrer" className="max-h-96 w-full rounded-belin-md object-contain" />
+      <figcaption className="mt-3 text-center text-xs text-muted">Sua fotografia original · pré-visualização local</figcaption>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2"><Button type="button" variant="quiet" disabled={disabled || checking} onClick={() => gallery.current?.click()}>Substituir fotografia</Button><Button type="button" variant="quiet" disabled={disabled} onClick={onRemove}>Remover fotografia</Button></div>
+    </figure> : null}
+    <aside className="mt-6 rounded-belin-md border border-nude bg-cream p-5" aria-label="Orientações para a fotografia">
+      <h3 className="text-sm font-semibold text-wine">Para uma imagem mais útil</h3>
+      <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-muted"><li>Prefira boa iluminação e uma fotografia nítida.</li><li>Mantenha o corpo visível e evite objetos cobrindo a roupa.</li><li>Use uma fotografia sua. Não envie imagens íntimas ou de outras pessoas.</li></ul>
+    </aside>
+  </div>;
 }

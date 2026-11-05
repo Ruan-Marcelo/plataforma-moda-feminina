@@ -8,7 +8,7 @@ A galeria aceita fotografias cadastradas, oferece controles de pelo menos 44 px,
 
 As cores e tamanhos vêm das variantes. Combinações inexistentes ou indisponíveis são desabilitadas, e a seleção mantém somente uma variante disponível. Peças sem variantes ou totalmente indisponíveis não habilitam os botões. Ausência de WhatsApp configurado também desabilita o contato, sem inventar um número.
 
-O WhatsApp e o provador validam a seleção novamente no servidor, conforme a ADR 0005. A página do provador apenas mostra a peça, cor e tamanho; não exibe upload nem executa geração de IA.
+O WhatsApp e o provador validam a seleção novamente no servidor, conforme a ADR 0005. A etapa posterior do provador adicionou preparação local da fotografia, autorização, estados e comparação de resultado, conforme a ADR 0006. O processamento real permanece desabilitado por padrão, sem resultados simulados. Veja `docs/virtual-fitting.md`.
 
 ## Configuração e exemplos
 

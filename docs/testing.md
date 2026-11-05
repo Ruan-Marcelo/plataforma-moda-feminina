@@ -1,5 +1,7 @@
 # Testes
 
+Na interface completa do provador, passaram 46 testes unitários e 26 cenários Playwright (12 de regressão dos detalhes e 14 do provador, contando a execução separada com serviço desabilitado). Dois cenários de serviço desabilitado são ignorados propositalmente no modo habilitado e executados na segunda configuração. Upload, comparação e conclusão são verificados com respostas interceptadas somente nos testes; nenhuma IA real foi chamada. O teste de cancelamento verifica também a revogação da URL local da fotografia. Veja `docs/virtual-fitting.md` para responsabilidades e dependências.
+
 Na etapa de detalhes das peças, passaram 28 testes unitários e 14 cenários Playwright em banco PostgreSQL separado, incluindo galeria, variantes, links, preços e redirecionamento ao painel. Veja os requisitos de isolamento e execução em `docs/product-details.md`.
 
 - npm run typecheck

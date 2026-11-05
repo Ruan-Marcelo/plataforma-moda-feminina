@@ -22,6 +22,8 @@ Passaram typecheck, lint (4 avisos preexistentes de `<img>`), 28 testes unitári
 
 ## Verificado
 
+- Etapa posterior do provador: interface completa com seis estados, fotografia local, autorização, cancelamento e comparação; geração real desabilitada por padrão. Passaram 46 testes unitários e 26 cenários E2E em banco temporário, com respostas do serviço interceptadas apenas nos testes e chamadas externas ao FASHN bloqueadas. Isso não comprova a integração operacional com IA. Veja `docs/virtual-fitting.md` e ADR 0006.
+
 - Next.js App Router, React e TypeScript strict compilam.
 - Tailwind e identidade BÉLIN estão configurados com bordô `#8D263B`, creme `#FFF0D0` e nude `#E8D8C4`.
 - Home responsiva usa o logotipo e a peça editorial oficiais da pasta `Designer/`, com menu mobile acessível e links reais para catálogo, categorias, provador e Instagram.

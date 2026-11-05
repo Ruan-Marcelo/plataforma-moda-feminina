@@ -1,6 +1,5 @@
 // RUAN MARCELO RAMACIOTI LUZ
-import { z } from "zod";
-export const virtualTryOnRequestSchema = z.object({ productId: z.string().cuid() });
+export { fittingSubmissionSchema as virtualTryOnRequestSchema } from "./contracts";
 export const maxVirtualTryOnFileSize = 8 * 1024 * 1024;
 export const supportedVirtualTryOnMimeTypes = ["image/jpeg", "image/png", "image/webp"] as const;
 function startsWith(bytes: Uint8Array, signature: number[]) { return signature.every((byte, index) => bytes[index] === byte); }

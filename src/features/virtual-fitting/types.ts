@@ -1,5 +1,5 @@
 // RUAN MARCELO RAMACIOTI LUZ
-export type VirtualTryOnRequest = { productId: string; image: File; garmentImageUrl: string };
+export type VirtualTryOnRequest = { productId: string; variantId: string; image: File; garmentImageUrl: string };
 export type VirtualTryOnResult = { resultUrl: string; providerRequestId?: string };
 export interface VirtualTryOnProvider { generate(request: VirtualTryOnRequest, signal?: AbortSignal): Promise<VirtualTryOnResult>; }
 export class VirtualTryOnNotConfiguredError extends Error { constructor() { super("Virtual try-on provider is not configured"); this.name = "VirtualTryOnNotConfiguredError"; } }
