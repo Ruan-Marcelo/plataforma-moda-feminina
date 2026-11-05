@@ -12,4 +12,6 @@ Provador real opcional: FASHN_API_KEY habilita o adaptador server-side FASHN; FA
 
 Provisionamento restrito: ADMIN_EMAIL, ADMIN_PASSWORD e ADMIN_PROVISION_CONFIRM=YES sao usados apenas pelo comando server-side db:provision-admin e nao devem ficar em arquivos versionados.
 
-Armazenamento de imagens opcional: S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY e S3_PUBLIC_BASE_URL habilitam uploads administrativos. Use S3_ENDPOINT para serviços compatíveis com S3, S3_REGION para a região e S3_FORCE_PATH_STYLE=true quando exigido pelo provedor. Sem esses valores, a aplicação não aceita upload e não simula armazenamento.
+O comando `npm run db:provision-admin` carrega explicitamente o `.env` local. O arquivo precisa existir, o e-mail deve ser válido e a senha administrativa deve ter pelo menos 12 caracteres. Execute somente contra o banco de desenvolvimento desejado; o provisionamento também atualiza uma conta existente com o mesmo e-mail.
+
+Armazenamento de imagens: `STORAGE_DRIVER=local` habilita uploads em disco durante desenvolvimento, sem credenciais externas. O padrão `STORAGE_DRIVER=s3` exige S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY e S3_PUBLIC_BASE_URL. Use S3_ENDPOINT para serviços compatíveis com S3, S3_REGION para a região e S3_FORCE_PATH_STYLE=true quando exigido pelo provedor. Sem a configuração do adaptador escolhido, a aplicação não aceita upload e não simula armazenamento. Local fica desativado em produção.

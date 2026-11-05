@@ -14,6 +14,7 @@ coverage/
 Thumbs.db
 .DS_Store
 .codex/
+.local-data/
 # Originais de design locais; os assets usados pelo site ficam em public/brand/.
 Designer/
 prisma/dev.db

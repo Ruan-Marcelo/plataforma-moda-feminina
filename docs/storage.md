@@ -1,5 +1,7 @@
 # Armazenamento de imagens
 
+Em desenvolvimento, `STORAGE_DRIVER=local` habilita armazenamento em `.local-data/catalog-images/`, ignorado pelo Git. A aplicação entrega essas imagens pela rota local somente fora de produção. Veja `docs/local-development.md` e a ADR 0004. S3 permanece o padrão e a opção de produção descrita abaixo.
+
 As imagens de catálogo são enviadas pelo backend para um serviço compatível com S3. O navegador nunca recebe as credenciais do bucket. A chave do objeto é criada no servidor no formato `products/{productId}/{uuid}.{ext}` e é registrada em `ProductImage.storageKey` para permitir exclusão segura.
 
 O endpoint administrativo valida MIME, assinatura real do arquivo e limite de 8 MiB antes do upload. A configuração é opcional em desenvolvimento; quando ausente, o endpoint retorna `storage_not_configured` e não cria uma imagem falsa.

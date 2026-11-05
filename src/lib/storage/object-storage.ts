@@ -8,6 +8,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { randomUUID } from "node:crypto";
 import { env } from "@/lib/env";
+import { LocalObjectStorage, localCatalogImageRoot } from "./local-object-storage";
 
 export class ObjectStorageNotConfiguredError extends Error {
   constructor() {
@@ -82,6 +83,10 @@ class S3ObjectStorage implements ObjectStorage {
 }
 
 export function getObjectStorage(): ObjectStorage {
+  if (env.STORAGE_DRIVER === "local") {
+    if (env.NODE_ENV === "production") throw new ObjectStorageNotConfiguredError();
+    return new LocalObjectStorage(localCatalogImageRoot());
+  }
   getStorageConfig();
   return new S3ObjectStorage();
 }
