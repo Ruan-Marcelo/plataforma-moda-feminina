@@ -1,0 +1,48 @@
+// RUAN MARCELO RAMACIOTI LUZ
+import { z } from "zod";
+
+const serverEnvSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  DATABASE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  STORE_NAME: z.string().trim().min(1).max(120).default("BÉLIN"),
+  STORE_WHATSAPP_NUMBER: z.string().regex(/^\d{10,15}$/).optional(),
+  STORE_INSTAGRAM_URL: z.string().url().default("https://instagram.com/usebelin"),
+  AUTH_SECRET: z.string().min(32).optional(),
+  AUTH_GOOGLE_ID: z.string().min(1).optional(),
+  AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
+  AUTH_APPLE_ID: z.string().min(1).optional(),
+  AUTH_APPLE_SECRET: z.string().min(1).optional(),
+  FASHN_API_KEY: z.string().min(1).optional(),
+  FASHN_MODEL: z.string().min(1).default("tryon-max"),
+  S3_ENDPOINT: z.string().url().optional(),
+  S3_REGION: z.string().min(1).default("us-east-1"),
+  S3_BUCKET: z.string().min(1).optional(),
+  S3_ACCESS_KEY_ID: z.string().min(1).optional(),
+  S3_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+  S3_PUBLIC_BASE_URL: z.string().url().optional(),
+  S3_FORCE_PATH_STYLE: z.coerce.boolean().default(false),
+});
+
+export const env = serverEnvSchema.parse({
+  NODE_ENV: process.env.NODE_ENV,
+  DATABASE_URL: process.env.DATABASE_URL,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  STORE_NAME: process.env.STORE_NAME,
+  STORE_WHATSAPP_NUMBER: process.env.STORE_WHATSAPP_NUMBER,
+  STORE_INSTAGRAM_URL: process.env.STORE_INSTAGRAM_URL,
+  AUTH_SECRET: process.env.AUTH_SECRET,
+  AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
+  AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
+  AUTH_APPLE_ID: process.env.AUTH_APPLE_ID,
+  AUTH_APPLE_SECRET: process.env.AUTH_APPLE_SECRET,
+  FASHN_API_KEY: process.env.FASHN_API_KEY,
+  FASHN_MODEL: process.env.FASHN_MODEL,
+  S3_ENDPOINT: process.env.S3_ENDPOINT,
+  S3_REGION: process.env.S3_REGION,
+  S3_BUCKET: process.env.S3_BUCKET,
+  S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+  S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
+  S3_PUBLIC_BASE_URL: process.env.S3_PUBLIC_BASE_URL,
+  S3_FORCE_PATH_STYLE: process.env.S3_FORCE_PATH_STYLE,
+});
