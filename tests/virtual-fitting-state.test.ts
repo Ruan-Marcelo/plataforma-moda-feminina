@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import { fittingReducer, initialFittingState, type FittingState } from "@/features/virtual-fitting/state";
 import { fittingConsentVersion, fittingResultSchema, fittingSubmissionSchema, hasProviderImage } from "@/features/virtual-fitting/contracts";
 
 const selection = { productId: "cm123456789012345678901234", variantId: "cm123456789012345678901235" };
 const photo = new File([new Uint8Array([0xff, 0xd8, 0xff])], "fixture.jpg", { type: "image/jpeg" });
-const result = { resultUrl: "https://cdn.fashn.ai/test-fixture.jpg" };
+const result = { resultUrl: `data:image/jpeg;base64,${readFileSync("public/brand/belin-logo.jpeg").toString("base64")}` };
 
 function prepared(): FittingState {
   let state = initialFittingState(selection);
@@ -69,7 +70,7 @@ describe("fitting contracts", () => {
     expect(fittingSubmissionSchema.safeParse({ ...request, variantId: "invalid" }).success).toBe(false);
   });
 
-  it("accepts result URLs only from the actual provider CDN", () => {
+  it("accepts only an inline private image, never a shared provider URL", () => {
     expect(fittingResultSchema.safeParse(result).success).toBe(true);
     for (const resultUrl of ["javascript:alert(1)", "http://cdn.fashn.ai/result.jpg", "https://cdn.fashn.ai.attacker.test/result.jpg", "https://user:password@cdn.fashn.ai/result.jpg", "/demo/blusa-frente.svg"]) expect(fittingResultSchema.safeParse({ resultUrl }).success).toBe(false);
   });

@@ -14,7 +14,7 @@ let variantId: string;
 let localProductId: string;
 let localVariantId: string;
 let fixture: Buffer;
-const resultUrl = "https://cdn.fashn.ai/e2e-contract-only/result.jpg";
+let resultUrl: string;
 
 test.beforeAll(async () => {
   if (!databaseUrl) return;
@@ -22,6 +22,7 @@ test.beforeAll(async () => {
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Use um banco de testes isolado belin_product_e2e_*");
   prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
   fixture = await readFile("public/brand/belin-logo.jpeg"); // Non-personal asset, never a customer's photograph.
+  resultUrl = `data:image/jpeg;base64,${fixture.toString("base64")}`;
   const marker = randomUUID();
   const product = await prisma.product.create({ data: {
     name: "E2E — Peça para o provador", slug: `e2e-provador-${marker}`, status: "PUBLISHED",
@@ -29,6 +30,7 @@ test.beforeAll(async () => {
     images: { create: { url: "https://images.example.test/e2e-garment.jpg", alt: "Imagem de teste do contrato" } },
   }, include: { variants: true } });
   productId = product.id; variantId = product.variants[0].id;
+  await prisma.productImage.updateMany({ where: { productId }, data: { storageKey: `products/${productId}/${randomUUID()}.jpg` } });
   const local = await prisma.product.create({ data: {
     name: "E2E — Ilustração local", slug: `e2e-local-${marker}`, status: "PUBLISHED",
     variants: { create: { color: "Preto", size: "P", available: true } },
@@ -185,6 +187,6 @@ test("uma ilustração local não habilita geração real", async ({ page }) => 
   test.skip(disabledMode);
   await start(page, true);
   await authorize(page);
-  await expect(page.getByText(/Imagens locais ou ilustrações de demonstração/)).toBeVisible();
+  await expect(page.getByText(/ilustrações de demonstração/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Gerar simulação", exact: true })).toBeDisabled();
 });

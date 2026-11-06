@@ -3,12 +3,14 @@ import "server-only";
 
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import { randomUUID } from "node:crypto";
 import { env } from "@/lib/env";
 import { LocalObjectStorage, localCatalogImageRoot } from "./local-object-storage";
+import { readBoundedStream } from "@/lib/security/bounded-stream";
 
 export class ObjectStorageNotConfiguredError extends Error {
   constructor() {
@@ -31,6 +33,7 @@ type PutObjectInput = {
 export interface ObjectStorage {
   put(input: PutObjectInput): Promise<StoredObject>;
   delete(key: string): Promise<void>;
+  read(key: string, signal?: AbortSignal): Promise<{ body: Uint8Array; contentType: string }>;
 }
 
 function getStorageConfig() {
@@ -79,6 +82,14 @@ class S3ObjectStorage implements ObjectStorage {
     await this.client.send(
       new DeleteObjectCommand({ Bucket: config.bucket, Key: key }),
     );
+  }
+
+  async read(key: string, signal?: AbortSignal) {
+    const config = getStorageConfig();
+    const object = await this.client.send(new GetObjectCommand({ Bucket: config.bucket, Key: key }), { abortSignal: signal });
+    if (!object.Body || (object.ContentLength ?? 0) > 8 * 1024 * 1024) throw new Error("invalid_image");
+    const body = await readBoundedStream(object.Body.transformToWebStream(), 8 * 1024 * 1024, signal);
+    return { body, contentType: object.ContentType?.split(";", 1)[0] ?? "application/octet-stream" };
   }
 }
 

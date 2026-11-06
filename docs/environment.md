@@ -12,7 +12,7 @@ OAuth opcional: AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_APPLE_ID e AUTH_APPLE_S
 
 Provador real opcional: FASHN_API_KEY habilita o adaptador server-side FASHN; FASHN_MODEL usa `tryon-max` por padrão. Nunca exponha a chave em variáveis `NEXT_PUBLIC_*`.
 
-O fluxo completo do provador exige também `VIRTUAL_FITTING_ENABLED=true`; o padrão é `false`. A chave isoladamente não permite processar fotografias. Ative somente após configuração operacional real e revisão das informações de finalidade, compartilhamento, retenção e demais condições de privacidade. Imagens locais/ilustrativas das peças não são compatíveis com geração real. Em desenvolvimento, seleção e pré-visualização funcionam sem habilitar o envio.
+O fluxo completo exige `VIRTUAL_FITTING_ENABLED=true`, `FASHN_SPENDING_APPROVED=true` e `FASHN_DAILY_CREDIT_LIMIT` de pelo menos 2 créditos; os padrões são false, false e 0. A chave isoladamente não permite processar fotografias ou autoriza custos. `FASHN_OWNER_DAILY_LIMIT` limita tentativas por sessão (padrão 3) e `FASHN_MAX_CONCURRENT` limita operações não conciliadas (padrão 2). As fotografias reais das peças são lidas do storage autorizado, inclusive disco local; ilustrações SVG continuam incompatíveis. Veja `docs/ai-integration-operations.md` antes de qualquer ativação.
 
 Provisionamento restrito: ADMIN_EMAIL, ADMIN_PASSWORD e ADMIN_PROVISION_CONFIRM=YES sao usados apenas pelo comando server-side db:provision-admin e nao devem ficar em arquivos versionados.
 

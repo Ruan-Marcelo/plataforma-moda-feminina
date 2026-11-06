@@ -11,6 +11,7 @@ export function useVirtualFitting(initialSelection: FittingSelection | null) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const activeRequest = useRef<AbortController | null>(null);
   const photoValidation = useRef(0);
+  const submissionId = useRef<string | null>(null);
   const busy = fittingIsBusy(state.status);
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export function useVirtualFitting(initialSelection: FittingSelection | null) {
   }, [state.photo]);
 
   useEffect(() => () => { activeRequest.current?.abort(); photoValidation.current += 1; }, []);
+  useEffect(() => { submissionId.current = null; }, [state.photo, state.selection?.productId, state.selection?.variantId]);
 
   async function selectPhoto(photo: File | undefined) {
     if (!photo || activeRequest.current) return;
@@ -45,11 +47,12 @@ export function useVirtualFitting(initialSelection: FittingSelection | null) {
   async function submit(allowed: boolean) {
     if (!allowed || activeRequest.current || busy || !state.selection || !state.photo || !state.consent || state.checkingPhoto || state.step !== "consent") return;
     const controller = new AbortController();
+    submissionId.current ??= crypto.randomUUID();
     activeRequest.current = controller;
     dispatch({ type: "submit" });
     try {
       const result = await sendFittingRequest({
-        selection: state.selection, photo: state.photo, consent: state.consent, signal: controller.signal,
+        requestId: submissionId.current, selection: state.selection, photo: state.photo, consent: state.consent, signal: controller.signal,
         onProgress: progress => { if (activeRequest.current === controller) dispatch({ type: "progress", progress }); },
         onUploaded: () => { if (activeRequest.current === controller) dispatch({ type: "uploaded" }); },
       });

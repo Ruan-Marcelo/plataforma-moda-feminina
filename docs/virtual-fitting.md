@@ -1,5 +1,15 @@
 # Provador virtual BÉLIN
 
+## Atualização da integração real
+
+A análise obrigatória prévia está em `docs/ai-integration-review.md`; a decisão técnica na ADR 0007 e a operação/retenção em `docs/ai-integration-operations.md`. O adaptador foi alinhado à API oficial, recebe ambas as fotos em base64 e pede saída base64. O resultado é uma imagem inline privada na própria resposta, nunca uma URL compartilhada de CDN.
+
+As peças são lidas por chave confiável do storage local/S3, com validação e decodificação no servidor, remoção de metadados e sem fetch de URLs arbitrárias. A elegibilidade agora depende de uma fotografia válida cadastrada no storage, não de uma URL pública. Ilustrações SVG e imagens externas sem acesso autorizado continuam bloqueadas. Não foi criada associação fictícia entre cor/variante e fotografia; o catálogo atual tem imagens por peça.
+
+O envio exige também aprovação explícita de gasto e reserva atômica em PostgreSQL. O padrão é orçamento zero e processamento desabilitado. A versão de autorização é `virtual-fitting-v2`. Metadados técnicos expiram em 30 dias e têm comando de limpeza; fotos/resultados não são armazenados na aplicação. O requestId é reaproveitado nas novas tentativas da mesma foto/seleção para impedir outra criação faturável depois de uma falha de rede.
+
+Nesta etapa passaram 60 testes unitários, dois testes de concorrência/cotas em PostgreSQL temporário e 26 cenários de navegador com serviço interceptado somente nos testes. Typecheck, lint e build foram executados. Não há geração real validada: a chave está ausente e não houve autorização de gastos ou chamada paga.
+
 ## Fluxo implementado
 
 `/provador` recebe `productId` e `variantId`, valida a seleção no servidor e carrega até 24 peças disponíveis do catálogo real. Uma peça recebida que não esteja nessa página do catálogo também é incluída, desde que publicada e disponível. O catálogo completo continua acessível por link.
@@ -20,21 +30,21 @@ O cliente envia somente o contrato abaixo para `POST /api/virtual-fitting`:
 | Campo | Regra |
 | --- | --- |
 | productId / variantId | CUIDs, pertencimento e disponibilidade revalidados no servidor |
-| requestId | UUID novo por tentativa; repetição recusada na janela local |
+| requestId | UUID mantido nas tentativas da mesma foto/seleção; duplicidade recusada em PostgreSQL |
 | consent | Literal `true`, sem aceite pré-marcado |
 | consentVersion | Versão definida em `contracts.ts` |
 | image | JPEG/PNG/WebP real, não vazio, até 8 MiB, com nome neutro no multipart |
 
-O adaptador FASHN preexistente continua isolado no servidor. O endpoint usa o timeout de 70 segundos já previsto e agora propaga o sinal de cancelamento ao adaptador. Respostas usam `Cache-Control: no-store`. Cancelar não garante exclusão ou cancelamento no fornecedor após o envio.
+O adaptador FASHN continua isolado no servidor. O endpoint usa deadline de 70 segundos, propaga o sinal de cancelamento e limita retries às consultas GET, sem repetir automaticamente o POST pago. Respostas usam `Cache-Control: private, no-store` e `Vary: Cookie`. Cancelar não garante exclusão ou cancelamento no fornecedor após o envio.
 
 ## Dependências pendentes e ativação
 
 O processamento permanece **desabilitado por padrão**. Não foi cadastrada chave de IA nem habilitado o serviço nesta etapa.
 
 - `FASHN_API_KEY` real e acesso operacional ao provedor.
-- Fotografia pública HTTPS e compatível da peça. Imagens locais e ilustrações SVG demonstrativas não habilitam a geração.
+- Fotografia compatível da peça acessível por chave autorizada no storage. Disco local é suportado; ilustrações SVG não habilitam geração.
 - Condições de finalidade, retenção, exclusão, transferência, responsabilidades e atendimento aos titulares revisadas pela loja. O checkbox não representa certificação jurídica.
-- Somente após concluir essas condições, definir `VIRTUAL_FITTING_ENABLED=true` no servidor.
+- Somente após concluir essas condições, aprovar um teto de créditos, definir `FASHN_SPENDING_APPROVED=true` e habilitar `VIRTUAL_FITTING_ENABLED=true` no servidor. A chave e um flag isolado não autorizam gastos.
 - Rate limiting distribuído, políticas operacionais e revisão dos contratos antes da publicação.
 
 Sem essas condições, a interface permite a pré-visualização local, mantém o botão de geração desabilitado e informa a pendência. Não há provedor fictício, resultado de demonstração, fallback generativo ou chamada de IA disparada por selecionar um arquivo.

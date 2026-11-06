@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { VirtualTryOnUpload } from "@/components/virtual-try-on-upload";
 import { findAvailableVariant } from "@/features/products/selection";
-import { fittingErrorMessages, hasProviderImage, type FittingProduct, type FittingSelection } from "@/features/virtual-fitting/contracts";
+import { fittingErrorMessages, type FittingProduct, type FittingSelection } from "@/features/virtual-fitting/contracts";
 import { useVirtualFitting } from "@/features/virtual-fitting/use-virtual-fitting";
 import { GarmentPicker } from "./garment-picker";
 import { FittingConsent } from "./consent";
@@ -19,9 +19,9 @@ export function VirtualFittingExperience({ products, initialSelection, selection
   const previousStep = useRef(state.step);
   const product = products.find(item => item.id === state.selection?.productId);
   const variant = product && state.selection ? findAvailableVariant(product.variants, state.selection.variantId) : null;
-  const imageReady = hasProviderImage(product?.image?.url);
+  const imageReady = Boolean(product?.image?.tryOnReady);
   const serviceBlocked = !serviceAvailable || state.error === "not_configured" || state.error === "not_enabled";
-  const canSubmit = !serviceBlocked && imageReady && Boolean(variant && state.photo && state.consent) && !state.checkingPhoto && !busy;
+  const canSubmit = !serviceBlocked && state.error !== "submission_unknown" && imageReady && Boolean(variant && state.photo && state.consent) && !state.checkingPhoto && !busy;
 
   useEffect(() => {
     if (previousStep.current !== state.step) { previousStep.current = state.step; heading.current?.focus(); }
@@ -54,11 +54,11 @@ export function VirtualFittingExperience({ products, initialSelection, selection
           {state.step === "consent" ? <>
             <p className="mb-5 break-words rounded-belin-md bg-cream p-4 text-sm text-wine">{product?.name} · {variant?.color} · {variant?.size}</p>
             <FittingConsent accepted={state.consent} disabled={busy} onChange={accepted => dispatch({ type: "consent", accepted })} />
-            {serviceBlocked ? <p className="mt-5 rounded-belin-md border border-nude p-4 text-sm leading-7 text-muted">Processamento indisponível: a loja ainda precisa habilitar o serviço real e concluir a configuração de privacidade. Sua fotografia não será enviada ao serviço de IA.</p> : !imageReady ? <p className="mt-5 rounded-belin-md border border-nude p-4 text-sm leading-7 text-muted">Esta peça ainda precisa de uma fotografia pública compatível com o serviço. Imagens locais ou ilustrações de demonstração não podem ser usadas para gerar uma simulação.</p> : null}
+            {serviceBlocked ? <p className="mt-5 rounded-belin-md border border-nude p-4 text-sm leading-7 text-muted">Processamento indisponível: a loja ainda precisa habilitar o serviço real e concluir a configuração de privacidade. Sua fotografia não será enviada ao serviço de IA.</p> : !imageReady ? <p className="mt-5 rounded-belin-md border border-nude p-4 text-sm leading-7 text-muted">Esta peça ainda precisa de uma fotografia válida no armazenamento da loja. Imagens externas sem acesso autorizado ou ilustrações de demonstração não podem ser usadas para gerar uma simulação.</p> : null}
             {busy ? <div className="mt-6" role="status" aria-live="polite"><p className="text-sm font-medium text-wine">{state.status === "uploading" ? "Enviando sua fotografia…" : "Criando sua simulação visual…"}</p><progress className="mt-3 h-2 w-full accent-wine" aria-label={state.status === "uploading" ? "Envio da fotografia" : "Processamento da simulação"} max={state.status === "uploading" ? 100 : undefined} value={state.status === "uploading" ? state.progress ?? undefined : undefined} />{state.status === "uploading" && state.progress !== null ? <p className="mt-2 text-xs text-muted">{state.progress}% do envio concluído</p> : <p className="mt-2 text-xs leading-6 text-muted">O tempo depende do envio e da resposta do serviço. Você pode cancelar a espera.</p>}</div> : null}
             <div className="mt-6 grid gap-3"><Button type="button" className="min-h-12" disabled={!canSubmit} aria-busy={busy} onClick={() => { void submit(canSubmit); }}>{busy ? "Solicitação em andamento" : state.status === "failed" ? "Tentar novamente" : "Gerar simulação"}</Button><Button type="button" variant="quiet" disabled={busy} onClick={() => dispatch({ type: "edit_photo" })}>Rever fotografia</Button><Button type="button" variant="quiet" onClick={cancel}>{busy ? "Cancelar envio e espera" : "Cancelar e limpar fotografia"}</Button></div>
           </> : null}
-          {state.step === "result" && state.result && previewUrl && state.selection ? <FittingResultView key={state.result.resultUrl} result={state.result} originalUrl={previewUrl} selection={state.selection} whatsappConfigured={whatsappConfigured} onAnother={() => dispatch({ type: "another_piece" })} onClear={cancel} /> : null}
+          {state.step === "result" && state.result && previewUrl && state.selection ? <FittingResultView key={state.result.operationId ?? "result"} result={state.result} originalUrl={previewUrl} selection={state.selection} whatsappConfigured={whatsappConfigured} onAnother={() => dispatch({ type: "another_piece" })} onClear={cancel} /> : null}
         </>}
       </section>
     </>}

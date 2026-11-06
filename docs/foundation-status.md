@@ -22,6 +22,8 @@ Passaram typecheck, lint (4 avisos preexistentes de `<img>`), 28 testes unitári
 
 ## Verificado
 
+- Integração real preparada conforme análise prévia da API FASHN: ambas as imagens e resultado em base64 privado, normalização/remoção de metadados no servidor, reserva persistente de créditos e operações em PostgreSQL, POST sem repetição automática, retry GET limitado e política de retenção. Chave ausente, aprovação falsa e orçamento zero: nenhuma geração paga foi chamada. Testes: 60 unitários, dois de cotas/concorrência em banco temporário e 26 E2E com contratos controlados. A validação operacional/qualidade com IA real continua bloqueada, conforme `docs/ai-integration-review.md`.
+
 - Etapa posterior do provador: interface completa com seis estados, fotografia local, autorização, cancelamento e comparação; geração real desabilitada por padrão. Passaram 46 testes unitários e 26 cenários E2E em banco temporário, com respostas do serviço interceptadas apenas nos testes e chamadas externas ao FASHN bloqueadas. Isso não comprova a integração operacional com IA. Veja `docs/virtual-fitting.md` e ADR 0006.
 
 - Next.js App Router, React e TypeScript strict compilam.

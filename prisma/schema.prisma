@@ -137,3 +137,26 @@ model AuditLog {
 
   @@index([actorId, createdAt])
 }
+
+model VirtualFittingOperation {
+  id                String   @id @default(cuid())
+  requestId         String   @unique
+  ownerHash         String
+  productId         String
+  variantId         String
+  consentVersion    String
+  status            String   @default("RESERVED")
+  providerRequestId String?
+  errorCode         String?
+  reservedCredits   Int
+  actualCredits     Int?
+  settledAt         DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  expiresAt         DateTime
+
+  @@index([createdAt])
+  @@index([ownerHash, createdAt])
+  @@index([settledAt])
+  @@index([expiresAt])
+}

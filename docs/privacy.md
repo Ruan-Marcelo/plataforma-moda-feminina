@@ -1,5 +1,7 @@
 # Privacidade e LGPD
 
+Na integração real preparada, fotos de entrada e resultado são transmitidos em base64 sem URLs públicas pessoais; o backend valida conteúdo e remove metadados da cópia de processamento. A aplicação não armazena essas imagens. Metadados técnicos de operação e versão do consentimento usam vínculo HMAC com sessão opaca HttpOnly, expiram em 30 dias e têm comando de limpeza. Isso é pseudonimização, não identificação/autenticação da pessoa nem certificação de anonimato. Política proposta, responsabilidades e bloqueios estão em `docs/ai-integration-operations.md` e a revisão das fontes oficiais em `docs/ai-integration-review.md`.
+
 O sistema ainda nao declara conformidade legal. Antes da publicacao, a loja deve revisar bases legais, politica de privacidade, cookies, retencao, transferencias internacionais e atendimento a solicitacoes de titulares.
 
 O provador exige revisao especifica: definir finalidade, fornecedor, retencao minima, exclusao de imagens e controle de acesso. Nao armazenar fotografias sem necessidade documentada.

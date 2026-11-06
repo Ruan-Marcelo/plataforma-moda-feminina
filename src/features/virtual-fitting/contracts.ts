@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { ProductVariant } from "@/features/products/selection";
 
-export const fittingConsentVersion = "virtual-fitting-v1";
+export const fittingConsentVersion = "virtual-fitting-v2";
 
 export const fittingSubmissionSchema = z.object({
   productId: z.string().cuid(),
@@ -11,23 +11,34 @@ export const fittingSubmissionSchema = z.object({
   consentVersion: z.literal(fittingConsentVersion),
 });
 
+export function decodePrivateFittingImage(value: string) {
+  if (value.length > 12 * 1024 * 1024) return null;
+  const match = /^data:(image\/(?:jpeg|png));base64,([A-Za-z0-9+/]+={0,2})$/.exec(value);
+  if (!match || match[2].length % 4 !== 0) return null;
+  try {
+    const decoded = atob(match[2]);
+    if (decoded.length < 16 || decoded.length > 8 * 1024 * 1024) return null;
+    const bytes = Uint8Array.from(decoded, char => char.charCodeAt(0));
+    const valid = match[1] === "image/jpeg" ? bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff : [137, 80, 78, 71, 13, 10, 26, 10].every((byte, index) => bytes[index] === byte);
+    return valid ? { bytes, mimeType: match[1] } : null;
+  } catch { return null; }
+}
+
 export const fittingResultSchema = z.object({
-  resultUrl: z.string().url().refine(value => {
-    try {
-      const url = new URL(value);
-      return url.origin === "https://cdn.fashn.ai" && !url.username && !url.password;
-    } catch { return false; }
-  }),
-  providerRequestId: z.string().min(1).optional(),
+  resultUrl: z.string().refine(value => decodePrivateFittingImage(value) !== null),
+  operationId: z.string().cuid().optional(),
 });
 
 export type FittingResult = z.infer<typeof fittingResultSchema>;
 export type FittingSelection = { productId: string; variantId: string };
+export function catalogImageIsReadable(productId: string, storageKey: string | null | undefined) {
+  return Boolean(storageKey && storageKey.startsWith(`products/${productId}/`) && /^products\/c[a-z0-9]+\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.(jpg|png|webp)$/.test(storageKey));
+}
 export type FittingProduct = {
   id: string;
   name: string;
   slug: string;
-  image: { url: string; alt: string } | null;
+  image: { url: string; alt: string; tryOnReady?: boolean } | null;
   variants: ProductVariant[];
 };
 
@@ -41,7 +52,7 @@ export function hasProviderImage(value: string | undefined) {
   } catch { return false; }
 }
 
-export type FittingErrorCode = "invalid_image" | "invalid_selection" | "consent_required" | "not_configured" | "not_enabled" | "variant_unavailable" | "product_image_unavailable" | "rate_limited" | "request_too_large" | "timeout" | "network" | "invalid_response" | "provider_unavailable" | "duplicate_request";
+export type FittingErrorCode = "invalid_image" | "invalid_selection" | "consent_required" | "not_configured" | "not_enabled" | "variant_unavailable" | "product_image_unavailable" | "rate_limited" | "request_too_large" | "timeout" | "network" | "invalid_response" | "provider_unavailable" | "duplicate_request" | "budget_exhausted" | "usage_limit" | "concurrency_limit" | "submission_unknown";
 
 export const fittingErrorMessages: Record<FittingErrorCode, string> = {
   invalid_image: "Escolha uma fotografia JPG, PNG ou WebP válida, com até 8 MB.",
@@ -58,4 +69,8 @@ export const fittingErrorMessages: Record<FittingErrorCode, string> = {
   invalid_response: "O serviço não retornou uma imagem válida. Nenhuma simulação foi apresentada.",
   provider_unavailable: "Não foi possível concluir a experimentação. Tente novamente mais tarde.",
   duplicate_request: "Esta solicitação já foi enviada. Aguarde antes de iniciar uma nova tentativa.",
+  budget_exhausted: "O limite diário de experimentações da loja foi atingido. Tente em outro dia.",
+  usage_limit: "O limite de experimentações desta sessão foi atingido. Tente em outro dia.",
+  concurrency_limit: "O provador está ocupado. Aguarde a conclusão das solicitações em andamento.",
+  submission_unknown: "Não foi possível confirmar o estado da solicitação. Não envie novamente agora; entre em contato com a loja.",
 };

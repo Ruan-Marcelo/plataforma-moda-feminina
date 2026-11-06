@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sendFittingRequest } from "@/features/virtual-fitting/client";
 import { fittingConsentVersion } from "@/features/virtual-fitting/contracts";
+import { readFileSync } from "node:fs";
+const privateResult = `data:image/jpeg;base64,${readFileSync("public/brand/belin-logo.jpeg").toString("base64")}`;
 
 class TestXHR {
   static instances: TestXHR[] = [];
@@ -47,9 +49,9 @@ describe("fitting browser transport (isolated XHR contract tests)", () => {
     expect(input.onProgress).toHaveBeenCalledWith(25);
     xhr.upload.onload?.();
     expect(input.onUploaded).toHaveBeenCalledOnce();
-    xhr.responseText = JSON.stringify({ resultUrl: "https://cdn.fashn.ai/contract-test.jpg" });
+    xhr.responseText = JSON.stringify({ resultUrl: privateResult });
     xhr.onload?.();
-    await expect(request).resolves.toEqual({ resultUrl: "https://cdn.fashn.ai/contract-test.jpg" });
+    await expect(request).resolves.toEqual({ resultUrl: privateResult });
   });
 
   it("rejects unsafe result URLs and surfaces unconfigured service errors", async () => {

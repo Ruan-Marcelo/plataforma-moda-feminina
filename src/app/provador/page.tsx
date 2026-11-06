@@ -6,6 +6,7 @@ import { findAvailableVariant, productSelectionSchema } from "@/features/product
 import type { FittingProduct } from "@/features/virtual-fitting/contracts";
 import { storeConfig } from "@/config/store";
 import { env } from "@/lib/env";
+import { catalogImageIsReadable } from "@/features/virtual-fitting/contracts";
 
 export const metadata = { title: "Provador virtual", description: "Escolha uma peça e prepare sua fotografia para uma simulação visual BÉLIN." };
 export const dynamic = "force-dynamic";
@@ -25,7 +26,7 @@ export default async function VirtualFittingPage({ searchParams }: Props) {
   const items = product && variant && !source.some(item => item.id === product.id) ? [product, ...source] : source;
   const products: FittingProduct[] = items.map(item => ({
     id: item.id, name: item.name, slug: item.slug,
-    image: item.images[0] ? { url: item.images[0].url, alt: item.images[0].alt } : null,
+    image: item.images[0] ? { url: item.images[0].url, alt: item.images[0].alt, tryOnReady: catalogImageIsReadable(item.id, item.images[0].storageKey) } : null,
     variants: item.variants.map(({ id, color, colorHex, size, available }) => ({ id, color, colorHex, size, available })),
   }));
   return <main className="min-h-screen bg-cream text-ink"><SiteHeader /><VirtualFittingExperience
@@ -34,7 +35,7 @@ export default async function VirtualFittingPage({ searchParams }: Props) {
     initialSelection={initialSelection}
     selectionError={hasSelection && !initialSelection}
     catalogUnavailable={!catalog}
-    serviceAvailable={Boolean(env.VIRTUAL_FITTING_ENABLED && env.FASHN_API_KEY)}
+    serviceAvailable={Boolean(env.VIRTUAL_FITTING_ENABLED && env.FASHN_API_KEY && env.AUTH_SECRET && env.FASHN_SPENDING_APPROVED && env.FASHN_DAILY_CREDIT_LIMIT >= 2)}
     whatsappConfigured={Boolean(storeConfig.whatsappNumber)}
   /><SiteFooter /></main>;
 }

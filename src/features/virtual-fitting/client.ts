@@ -9,9 +9,11 @@ const responseErrors: Record<string, FittingErrorCode> = {
   invalid_request: "invalid_selection", invalid_image: "invalid_image", variant_unavailable: "variant_unavailable",
   product_image_unavailable: "product_image_unavailable", rate_limited: "rate_limited", request_too_large: "request_too_large",
   timeout: "timeout", duplicate_request: "duplicate_request",
+  budget_exhausted: "budget_exhausted", usage_limit: "usage_limit", concurrency_limit: "concurrency_limit", submission_unknown: "submission_unknown",
 };
 
 type RequestOptions = {
+  requestId?: string;
   selection: FittingSelection;
   photo: File;
   consent: boolean;
@@ -23,7 +25,7 @@ type RequestOptions = {
 export function sendFittingRequest(options: RequestOptions): Promise<FittingResult> {
   if (!options.consent) return Promise.reject(new FittingRequestError("consent_required"));
   if (options.signal.aborted) return Promise.reject(new DOMException("Cancelled", "AbortError"));
-  const fields = fittingSubmissionSchema.safeParse({ ...options.selection, requestId: crypto.randomUUID(), consent: "true", consentVersion: fittingConsentVersion });
+  const fields = fittingSubmissionSchema.safeParse({ ...options.selection, requestId: options.requestId ?? crypto.randomUUID(), consent: "true", consentVersion: fittingConsentVersion });
   if (!fields.success) return Promise.reject(new FittingRequestError("invalid_selection"));
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
@@ -32,7 +34,7 @@ export function sendFittingRequest(options: RequestOptions): Promise<FittingResu
     const fail = (error: Error) => { if (finished) return; finished = true; cleanup(); reject(error); };
     const abort = () => { request.abort(); fail(new DOMException("Cancelled", "AbortError")); };
     request.open("POST", "/api/virtual-fitting");
-    request.timeout = 90_000;
+    request.timeout = 120_000;
     request.upload.onprogress = event => options.onProgress(event.lengthComputable && event.total > 0 ? Math.round(event.loaded / event.total * 100) : null);
     request.upload.onload = () => { if (!finished && !options.signal.aborted) options.onUploaded(); };
     request.onerror = () => fail(new FittingRequestError("network"));
