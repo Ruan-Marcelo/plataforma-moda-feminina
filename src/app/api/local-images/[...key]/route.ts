@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { env } from "@/lib/env";
 import { prisma } from "@/lib/db/prisma";
 import { LocalObjectStorage, localCatalogImageRoot } from "@/lib/storage/local-object-storage";
+import { auth } from "@/../auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,8 +15,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ key
   try {
     const key = (await params).key.join("/");
     const storage = new LocalObjectStorage(localCatalogImageRoot());
-    const image = await prisma.productImage.findFirst({ where: { storageKey: key }, select: { id: true } });
+    const image = await prisma.productImage.findFirst({ where: { storageKey: key }, select: { id: true, product: { select: { status: true } } } });
     if (!image) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    if (image.product.status !== "PUBLISHED") {
+      const session = await auth();
+      if (!session?.user || !["ADMIN", "EDITOR"].includes(session.user.role)) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    }
     const stored = await storage.read(key);
     return new NextResponse(stored.body, {
       headers: { "Content-Type": stored.contentType, "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" },

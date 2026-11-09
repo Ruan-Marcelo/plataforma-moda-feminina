@@ -7,6 +7,8 @@ import { compare } from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
+import { createHmac } from "node:crypto";
+import { consumeRateLimit } from "@/lib/security/rate-limit";
 
 const credentialsSchema = z.object({
   email: z.string().email().max(254),
@@ -23,6 +25,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         const parsed = credentialsSchema.safeParse(credentials);
         if (!parsed.success) return null;
+        if (!env.AUTH_SECRET) return null;
+        const accountKey = createHmac("sha256", env.AUTH_SECRET).update(parsed.data.email.toLowerCase()).digest("hex");
+        if (!consumeRateLimit("login:global", 60, 60000).allowed || !consumeRateLimit(`login:${accountKey}`, 10, 15 * 60000).allowed) return null;
         const user = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
         if (!user?.passwordHash || !(await compare(parsed.data.password, user.passwordHash))) return null;
         return { id: user.id, email: user.email, name: user.name, role: user.role };
