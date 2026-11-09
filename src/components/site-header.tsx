@@ -10,6 +10,7 @@ const links = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/categorias", label: "Categorias" },
   { href: "/provador", label: "Provador virtual" },
+  { href: "/contato", label: "Contato" },
 ] as const;
 
 export function SiteHeader() {

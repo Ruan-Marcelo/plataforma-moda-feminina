@@ -7,4 +7,5 @@ export const storeConfig = {
   appUrl: env.NEXT_PUBLIC_APP_URL.replace(/\/$/, ""),
   instagramUrl: env.STORE_INSTAGRAM_URL,
   whatsappNumber: env.STORE_WHATSAPP_NUMBER,
+  serviceInformation: env.STORE_SERVICE_INFORMATION,
 } as const;

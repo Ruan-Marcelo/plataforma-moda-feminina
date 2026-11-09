@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { StoreContact } from "@/components/store-contact";
 import { createFittingPath, findAvailableVariant, getVariantSizes, selectVariantForColor, type ProductVariant } from "@/features/products/selection";
 
 type Props = { productId: string; whatsappConfigured: boolean; variants: ProductVariant[] };
@@ -40,7 +41,7 @@ export function ProductVariantSelector({ productId, whatsappConfigured, variants
       </div>
       <div className="mt-6 grid gap-3">
         {selected ? <Link href={createFittingPath(productId, selected.id)} className="inline-flex min-h-14 items-center justify-center rounded-full border border-wine bg-white px-5 py-4 text-center text-sm font-medium text-wine transition-colors hover:bg-nude">Experimentar virtualmente</Link> : <button type="button" disabled className={disabledAction}>Experimentar virtualmente</button>}
-        {selected && whatsappConfigured ? <a href={`/api/products/${productId}/interest?${new URLSearchParams({ variantId: selected.id })}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-14 items-center justify-center rounded-full bg-wine px-5 py-4 text-center text-sm font-medium text-white transition-colors hover:bg-wine-dark">Tenho interesse</a> : <button type="button" disabled className={disabledAction}>Tenho interesse</button>}
+        {selected && whatsappConfigured ? <StoreContact configured productId={productId} variantId={selected.id} className="inline-flex min-h-14 items-center justify-center rounded-full bg-wine px-5 py-4 text-center text-sm font-medium text-white transition-colors hover:bg-wine-dark" /> : <button type="button" disabled className={disabledAction}>Tenho interesse</button>}
       </div>
       {!whatsappConfigured ? <p className="mt-3 text-xs leading-5 text-muted">O contato pelo WhatsApp ainda não foi configurado pela loja.</p> : null}
       <p className="mt-3 text-xs leading-5 text-muted">O provador receberá a peça e a variante escolhidas. A navegação não envia fotografias nem inicia processamento.</p>

@@ -14,11 +14,11 @@ const interestSchema = z.object({
     color: z.string().trim().min(1).max(60),
     size: z.string().trim().min(1).max(30),
     available: z.literal(true),
-  }),
+  }).optional(),
 });
 
 export function createProductInterestLink(input: z.input<typeof interestSchema>) {
   const { number, product, variant } = interestSchema.parse(input);
-  const description = `${product.name} (referência: ${product.slug}; cor: ${variant.color}; tamanho: ${variant.size}; variante: ${variant.id})`;
+  const description = `${product.name}, referência ${product.slug}${variant ? `, tamanho: ${variant.size}, cor: ${variant.color}, variante: ${variant.id}` : ""}`;
   return createWhatsAppLink(number, description, product.url);
 }

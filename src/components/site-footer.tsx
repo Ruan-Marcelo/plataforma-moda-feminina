@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { storeConfig } from "@/config/store";
 import { createWhatsAppLink } from "@/lib/whatsapp";
+import { StoreContact } from "@/components/store-contact";
 
 export function SiteFooter() {
   const whatsappUrl = storeConfig.whatsappNumber ? createWhatsAppLink(storeConfig.whatsappNumber) : null;
@@ -12,7 +13,8 @@ export function SiteFooter() {
         <div><p className="font-display text-3xl text-wine">{storeConfig.name}</p><p className="mt-2 max-w-sm leading-6">Moda feminina para vestir a sua essência com presença e intenção.</p></div>
         <nav className="flex flex-wrap items-start gap-x-5 gap-y-3" aria-label="Links institucionais">
           <Link href="/privacidade" className="rounded px-1 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine">Privacidade</Link>
-          {whatsappUrl ? <a href={whatsappUrl} target="_blank" rel="noreferrer" className="rounded px-1 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine">WhatsApp</a> : null}
+          <Link href="/contato" className="rounded px-1 underline-offset-4 hover:underline">Contato e atendimento</Link>
+          {whatsappUrl ? <StoreContact configured href={whatsappUrl} label="WhatsApp" className="rounded px-1 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine" /> : null}
           {storeConfig.instagramUrl ? <a href={storeConfig.instagramUrl} target="_blank" rel="noreferrer" className="rounded px-1 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine">@usebelin</a> : null}
         </nav>
       </div>
