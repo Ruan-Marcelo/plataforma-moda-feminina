@@ -34,6 +34,7 @@ export async function GET(request: Request) {
         variants: product.variants.map((variant) => ({ size: variant.size, color: variant.color, colorHex: variant.colorHex, available: variant.available })),
         variantCount: product.variants.length,
         imageCount: product.images.length,
+        images: product.images.map(({ id, url, alt, sortOrder }) => ({ id, url, alt, sortOrder })),
         updatedAt: product.updatedAt.toISOString(),
       })),
     });

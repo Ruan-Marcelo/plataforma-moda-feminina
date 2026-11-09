@@ -4,6 +4,7 @@ import { listPublishedCategories } from "@/features/products/repository";
 import { env } from "@/lib/env";
 
 export const metadata = { title: "Categorias", description: "Explore as categorias de moda feminina da BÉLIN." };
+export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
   let categories = null;

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useId, useRef, useState, type KeyboardEvent } from "react";
+import { canOptimizeCatalogImage } from "@/features/products/image-policy";
 
 type GalleryImage = { id: string; url: string; alt: string };
 
@@ -45,14 +46,14 @@ export function ProductGallery({ images, productName }: { images: GalleryImage[]
         }}
         onTouchCancel={() => { touchStart.current = null; }}
       >
-        {failedImages.includes(activeImage.id) ? <div className="flex aspect-[4/5] items-center justify-center p-8 text-center text-sm text-muted">Não foi possível carregar esta fotografia. Tente outra imagem.</div> : <Image src={activeImage.url} alt={activeImage.alt || `${productName}, fotografia ${index + 1}`} width={1000} height={1250} unoptimized priority={index === 0} className="aspect-[4/5] h-auto w-full object-contain" onError={() => setFailedImages(current => [...current, activeImage.id])} />}
+        {failedImages.includes(activeImage.id) ? <div className="flex aspect-[4/5] items-center justify-center p-8 text-center text-sm text-muted">Não foi possível carregar esta fotografia. Tente outra imagem.</div> : <Image src={activeImage.url} alt={activeImage.alt || `${productName}, fotografia ${index + 1}`} width={1000} height={1250} sizes="(min-width: 1024px) 55vw, 100vw" unoptimized={!canOptimizeCatalogImage(activeImage.url)} priority={index === 0} className="aspect-[4/5] h-auto w-full object-contain" onError={() => setFailedImages(current => [...current, activeImage.id])} />}
         {images.length > 1 ? <>
           <button type="button" className="absolute left-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-nude bg-white/95 text-3xl text-wine shadow-belin-soft hover:bg-cream" aria-label="Imagem anterior" aria-controls={imageId} onClick={() => move(-1)}>‹</button>
           <button type="button" className="absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-nude bg-white/95 text-3xl text-wine shadow-belin-soft hover:bg-cream" aria-label="Próxima imagem" aria-controls={imageId} onClick={() => move(1)}>›</button>
         </> : null}
       </div>
       <div className="mt-3 flex items-center justify-between gap-3 text-xs text-muted"><p aria-live="polite" aria-atomic="true">Fotografia {index + 1} de {images.length}</p>{images.length > 1 ? <p>Deslize para ver mais</p> : null}</div>
-      {images.length > 1 ? <div className="mt-4 grid grid-cols-5 gap-2" role="group" aria-label="Selecionar fotografia">{images.map((image, imageIndex) => <button key={image.id} type="button" aria-pressed={imageIndex === index} aria-controls={imageId} aria-label={`Ver fotografia ${imageIndex + 1}`} className={`min-h-11 min-w-0 overflow-hidden rounded-belin-sm border-2 bg-white p-0.5 ${imageIndex === index ? "border-wine" : "border-transparent hover:border-nude"}`} onClick={() => setActiveIndex(imageIndex)}><Image src={image.url} alt="" width={100} height={125} unoptimized className="aspect-[4/5] h-auto w-full object-cover" /></button>)}</div> : null}
+      {images.length > 1 ? <div className="mt-4 grid grid-cols-5 gap-2" role="group" aria-label="Selecionar fotografia">{images.map((image, imageIndex) => <button key={image.id} type="button" aria-pressed={imageIndex === index} aria-controls={imageId} aria-label={`Ver fotografia ${imageIndex + 1}`} className={`min-h-11 min-w-0 overflow-hidden rounded-belin-sm border-2 bg-white p-0.5 ${imageIndex === index ? "border-wine" : "border-transparent hover:border-nude"}`} onClick={() => setActiveIndex(imageIndex)}><Image src={image.url} alt="" width={100} height={125} sizes="(min-width: 1024px) 120px, 20vw" loading="lazy" unoptimized={!canOptimizeCatalogImage(image.url)} className="aspect-[4/5] h-auto w-full object-cover" /></button>)}</div> : null}
     </section>
   );
 }

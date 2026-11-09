@@ -31,7 +31,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
   return (
     <main className="min-h-screen bg-cream text-ink">
       <SiteHeader />
-      <div className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:py-10">
+      <div id="page-content" tabIndex={-1} className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:py-10">
         <nav aria-label="Caminho da página" className="mb-6 flex min-w-0 flex-wrap items-center gap-2 text-xs leading-6 text-muted">
           <Link href="/catalogo" className="inline-flex min-h-11 items-center rounded underline-offset-4 hover:underline">Catálogo</Link><span aria-hidden="true">/</span><span className="min-w-0 break-words" aria-current="page">{product.name}</span>
         </nav>

@@ -27,7 +27,7 @@ export function VirtualFittingExperience({ products, initialSelection, selection
     if (previousStep.current !== state.step) { previousStep.current = state.step; heading.current?.focus(); }
   }, [state.step]);
 
-  return <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:py-12" data-fitting-status={state.status}>
+  return <div id="page-content" tabIndex={-1} className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:py-12" data-fitting-status={state.status}>
     <p className="text-xs uppercase tracking-[0.25em] text-wine">BÉLIN · Provador virtual</p>
     <h1 ref={heading} tabIndex={-1} className="mt-4 break-words font-display text-4xl leading-tight text-wine sm:text-5xl">{titles[state.step]}</h1>
     {state.step === "intro" ? <>

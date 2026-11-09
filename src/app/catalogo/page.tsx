@@ -43,7 +43,7 @@ export default async function CatalogPage({ searchParams }: { searchParams?: Pro
   return (
     <main className="min-h-screen bg-cream text-ink">
       <SiteHeader />
-      <div className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-16">
+      <div id="page-content" tabIndex={-1} className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-16">
         <Link href="/" className="rounded text-sm text-wine underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine">← Voltar para {storeConfig.name}</Link>
         <p className="mt-12 text-xs uppercase tracking-[0.3em] text-wine">Catálogo</p>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-4"><div><h1 className="font-display text-5xl text-wine md:text-7xl">Peças selecionadas</h1><p className="mt-4 max-w-xl text-muted">Encontre uma peça por nome, categoria, tamanho, cor ou disponibilidade.</p></div>{result ? <p className="text-sm text-muted" aria-live="polite">{result.total} {result.total === 1 ? "resultado" : "resultados"}</p> : null}</div>
