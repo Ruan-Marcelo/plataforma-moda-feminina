@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductCard } from "@/components/product-card";
 import { ProductVariantSelector } from "@/components/product-variant-selector";
+import { FavoriteButton } from "@/components/favorites/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { storeConfig } from "@/config/store";
@@ -40,6 +41,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             <p className="text-xs uppercase tracking-[0.2em] text-wine">{product.category?.name ?? "Curadoria BÉLIN"}</p>
             <h1 id="product-title" className="mt-3 break-words font-display text-4xl leading-tight text-wine sm:text-5xl lg:text-6xl">{product.name}</h1>
             <p className="mt-3 break-all text-xs text-muted">Referência: {product.slug}</p>
+            <div className="mt-5"><FavoriteButton productId={product.id} productName={product.name} /></div>
             {storeConfig.showPrices && product.priceCents !== null ? <p className="mt-6 text-2xl font-medium text-wine" aria-label="Preço">{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.priceCents / 100)}</p> : <p className="mt-6 text-sm text-muted">Preço sob consulta</p>}
             {staleSelection ? <p className="mt-5 rounded-belin-md border border-wine bg-white p-4 text-sm text-wine" role="alert">A combinação escolhida não está mais disponível. Confira as opções atualizadas abaixo.</p> : null}
             <ProductVariantSelector key={product.id} productId={product.id} whatsappConfigured={Boolean(storeConfig.whatsappNumber)} variants={variantData} />

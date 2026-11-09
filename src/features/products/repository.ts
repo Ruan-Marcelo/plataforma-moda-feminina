@@ -67,6 +67,10 @@ export async function findPublishedProductById(id: string) {
   return prisma.product.findFirst({ where: { id, status: "PUBLISHED" }, include: productInclude });
 }
 
+export async function findPublishedProductsByIds(ids: string[]) {
+  return prisma.product.findMany({ where: { id: { in: ids }, status: "PUBLISHED" }, include: productInclude, take: 100 });
+}
+
 export async function listRelatedPublishedProducts(productId: string, categoryId?: string | null, collectionId?: string | null, take = 4) {
   const relationFilters: Prisma.ProductWhereInput[] = [];
   if (categoryId) relationFilters.push({ categoryId });

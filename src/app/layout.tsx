@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { storeConfig } from "@/config/store";
 import { CookieConsent } from "@/components/cookie-consent";
+import { FavoritesProvider } from "@/components/favorites/provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(storeConfig.appUrl),
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="pt-BR"><body>{children}<CookieConsent /></body></html>;
+  return <html lang="pt-BR"><body><FavoritesProvider>{children}<CookieConsent /></FavoritesProvider></body></html>;
 }
