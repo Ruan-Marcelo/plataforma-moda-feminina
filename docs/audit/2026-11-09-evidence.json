@@ -1,0 +1,2012 @@
+{
+  "date": "2026-11-09",
+  "appRevision": "60b17e769e26d1c77e349c6845b8aff6bd70f1a7",
+  "widths": [
+    320,
+    375,
+    390,
+    430,
+    768,
+    1024,
+    1440
+  ],
+  "baseline": {
+    "combinations": 63,
+    "overflows": 0,
+    "contrastFailures": 21
+  },
+  "final": {
+    "combinations": 103,
+    "overflows": 0,
+    "automaticViolations": 0,
+    "browserErrors": 0,
+    "axeTags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ]
+  },
+  "functional": {
+    "unitPassed": 76,
+    "postgresPassed": 2,
+    "browserUniquePassed": 52,
+    "browserWithoutDatabaseSkipped": 2
+  },
+  "performance": {
+    "type": "local laboratory, not field data",
+    "summary": [
+      {
+        "width": 390,
+        "route": "/",
+        "samples": 3,
+        "LCP": {
+          "min": 468,
+          "max": 628
+        },
+        "INP": {
+          "min": 64,
+          "max": 120
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 142416,
+          "max": 142416
+        },
+        "initialRequests": {
+          "min": 16,
+          "max": 16
+        }
+      },
+      {
+        "width": 390,
+        "route": "/catalogo",
+        "samples": 3,
+        "LCP": {
+          "min": 856,
+          "max": 964
+        },
+        "INP": {
+          "min": 56,
+          "max": 88
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 142416,
+          "max": 142416
+        },
+        "initialRequests": {
+          "min": 16,
+          "max": 16
+        }
+      },
+      {
+        "width": 390,
+        "route": "/produto/demo-blusa-bordo",
+        "samples": 3,
+        "LCP": {
+          "min": 608,
+          "max": 684
+        },
+        "INP": {
+          "min": 48,
+          "max": 88
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 145149,
+          "max": 145149
+        },
+        "initialRequests": {
+          "min": 16,
+          "max": 16
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "samples": 3,
+        "LCP": {
+          "min": 388,
+          "max": 448
+        },
+        "INP": {
+          "min": 24,
+          "max": 48
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 149982,
+          "max": 149982
+        },
+        "initialRequests": {
+          "min": 24,
+          "max": 24
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/catalogo",
+        "samples": 3,
+        "LCP": {
+          "min": 452,
+          "max": 504
+        },
+        "INP": {
+          "min": 24,
+          "max": 24
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 149982,
+          "max": 149982
+        },
+        "initialRequests": {
+          "min": 23,
+          "max": 23
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/produto/demo-blusa-bordo",
+        "samples": 3,
+        "LCP": {
+          "min": 388,
+          "max": 428
+        },
+        "INP": {
+          "min": 24,
+          "max": 32
+        },
+        "CLS": {
+          "min": 0,
+          "max": 0
+        },
+        "initialJS": {
+          "min": 152715,
+          "max": 152715
+        },
+        "initialRequests": {
+          "min": 22,
+          "max": 22
+        }
+      }
+    ],
+    "samples": [
+      {
+        "width": 390,
+        "route": "/",
+        "sample": 1,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 468,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 64,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 20,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/",
+        "sample": 2,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 628,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 72,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 20,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/",
+        "sample": 3,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 624,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 120,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 20,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/catalogo",
+        "sample": 1,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 860,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 56,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 21,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/catalogo",
+        "sample": 2,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 856,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 88,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 21,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/catalogo",
+        "sample": 3,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 964,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 64,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 142416,
+          "images": 2
+        },
+        "resources": {
+          "requests": 21,
+          "jsEncodedBytes": 144985,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 1,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 672,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 56,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 145149,
+          "images": 2
+        },
+        "resources": {
+          "requests": 22,
+          "jsEncodedBytes": 147718,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 2,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 608,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 88,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 145149,
+          "images": 2
+        },
+        "resources": {
+          "requests": 22,
+          "jsEncodedBytes": 147718,
+          "images": 2
+        }
+      },
+      {
+        "width": 390,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 3,
+        "cpuSlowdown": 4,
+        "metrics": {
+          "LCP": {
+            "value": 684,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 48,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 16,
+          "jsEncodedBytes": 145149,
+          "images": 2
+        },
+        "resources": {
+          "requests": 22,
+          "jsEncodedBytes": 147718,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "sample": 1,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 388,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 32,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 24,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "sample": 2,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 404,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 48,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 24,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "sample": 3,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 448,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 24,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/catalogo",
+        "sample": 1,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 452,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 23,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 25,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/catalogo",
+        "sample": 2,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 504,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 23,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 25,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/catalogo",
+        "sample": 3,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 492,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 23,
+          "jsEncodedBytes": 149982,
+          "images": 2
+        },
+        "resources": {
+          "requests": 25,
+          "jsEncodedBytes": 150169,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 1,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 388,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 32,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 22,
+          "jsEncodedBytes": 152715,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 152902,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 2,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 388,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 22,
+          "jsEncodedBytes": 152715,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 152902,
+          "images": 2
+        }
+      },
+      {
+        "width": 1440,
+        "route": "/produto/demo-blusa-bordo",
+        "sample": 3,
+        "cpuSlowdown": 1,
+        "metrics": {
+          "LCP": {
+            "value": 428,
+            "rating": "good"
+          },
+          "CLS": {
+            "value": 0,
+            "rating": "good"
+          },
+          "INP": {
+            "value": 24,
+            "rating": "good"
+          }
+        },
+        "initialResources": {
+          "requests": 22,
+          "jsEncodedBytes": 152715,
+          "images": 2
+        },
+        "resources": {
+          "requests": 26,
+          "jsEncodedBytes": 152902,
+          "images": 2
+        }
+      }
+    ]
+  },
+  "secrets": {
+    "filesChecked": 45,
+    "configuredSensitiveVariablesChecked": 3,
+    "hits": [],
+    "forbiddenTracked": []
+  },
+  "api": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/admin",
+      "status": 307,
+      "location": "/login",
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/api/admin/products",
+      "status": 401,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": null
+    },
+    {
+      "path": "/api/admin/taxonomy",
+      "status": 401,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": null
+    },
+    {
+      "path": "/api/admin/analytics/export",
+      "status": 401,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": null
+    },
+    {
+      "path": "/api/local-images/products/invalid/private.jpg",
+      "status": 404,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": null
+    },
+    {
+      "path": "/api/virtual-fitting",
+      "status": 503,
+      "location": null,
+      "nosniff": "nosniff",
+      "frame": "DENY",
+      "referrer": "strict-origin-when-cross-origin",
+      "cacheControl": "private, no-store"
+    }
+  ],
+  "dependencyCounts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 8,
+    "high": 3,
+    "critical": 2,
+    "total": 13
+  },
+  "productionDependencyCounts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 3,
+    "critical": 0,
+    "total": 3
+  },
+  "observations": [
+    {
+      "width": 320,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 320,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 320,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 320,
+      "path": "/#menu-open",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 375,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 375,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 375,
+      "path": "/#menu-open",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 375,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 390,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 390,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 390,
+      "path": "/#menu-open",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 430,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 430,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 430,
+      "path": "/#menu-open",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 430,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 768,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 768,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 768,
+      "path": "/#menu-open",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 768,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 1024,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1024,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/categorias",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/catalogo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/produto/demo-blusa-bordo",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "color-contrast",
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/favoritos",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/provador",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/login",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/contato",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/privacidade",
+      "kind": "page",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/#cookie-dialog",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/favoritos#saved-piece",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/provador#selection",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": [
+        "label-content-name-mismatch"
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/provador#photo-preview",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "width": 1440,
+      "path": "/provador#consent-disabled",
+      "kind": "interactive-state",
+      "status": 200,
+      "overflow": false,
+      "errors": [],
+      "violations": [],
+      "incomplete": []
+    }
+  ]
+}

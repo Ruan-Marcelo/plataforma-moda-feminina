@@ -1,5 +1,10 @@
 // RUAN MARCELO RAMACIOTI LUZ
 import { expect, test } from "@playwright/test";
+import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(key => localStorage.setItem(key, JSON.stringify({ necessary: true, analytics: false, marketing: false })), cookieConsentStorageKey);
+});
 
 test("home apresenta navegação pública e chamada para o catálogo", async ({ page }) => {
   await page.goto("/");
@@ -20,6 +25,7 @@ test("menu mobile abre e fecha com controle acessível", async ({ page }) => {
 });
 
 test("catálogo sem banco não apresenta produtos inventados", async ({ page }) => {
+  test.skip(Boolean(process.env.E2E_DATABASE_URL), "This case requires an environment without a database; audited separately.");
   await page.goto("/catalogo");
   await expect(page.getByRole("heading", { name: "Peças selecionadas" })).toBeVisible();
   await expect(page.getByText("temporariamente indisponível")).toBeVisible();
