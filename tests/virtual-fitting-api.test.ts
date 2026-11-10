@@ -3,7 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fittingConsentVersion } from "@/features/virtual-fitting/contracts";
 import { VirtualTryOnProviderError, VirtualTryOnTimeoutError } from "@/features/virtual-fitting/types";
 
-const { generate, findProduct, limit, garment, reserve, submitted, finish } = vi.hoisted(() => ({ generate: vi.fn(), findProduct: vi.fn(), limit: vi.fn(), garment: vi.fn(), reserve: vi.fn(), submitted: vi.fn(), finish: vi.fn() }));
+const { generate, findProduct, limit, garment, reserve, submitted, finish, storePhoto } = vi.hoisted(() => ({ generate: vi.fn(), findProduct: vi.fn(), limit: vi.fn(), garment: vi.fn(), reserve: vi.fn(), submitted: vi.fn(), finish: vi.fn(), storePhoto: vi.fn() }));
+vi.mock("@/lib/storage/object-storage", () => ({ getObjectStorage: () => ({ put: storePhoto }) }));
 vi.mock("@/features/products/repository", () => ({ findPublishedProductById: findProduct }));
 vi.mock("@/features/virtual-fitting/garment-image", () => ({ readGarmentImage: garment }));
 vi.mock("@/lib/env", () => ({ env: { DATABASE_URL: "test-only", AUTH_SECRET: "test-only-secret-with-at-least-32-characters", NODE_ENV: "test", NEXT_PUBLIC_APP_URL: "http://localhost", FASHN_API_KEY: "test-only-not-a-real-key", VIRTUAL_FITTING_ENABLED: true, FASHN_SPENDING_APPROVED: true, FASHN_DAILY_CREDIT_LIMIT: 10, FASHN_OWNER_DAILY_LIMIT: 3, FASHN_MAX_CONCURRENT: 2 } }));
@@ -82,6 +83,7 @@ describe("paid fitting boundaries (no external network; provider is mocked)", ()
     const data = await response.json();
     expect(data).toEqual({ resultUrl: privateResult, operationId });
     expect(data).not.toHaveProperty("providerRequestId");
+    expect(storePhoto).not.toHaveBeenCalled();
     expect(generate.mock.calls[0][0]).toMatchObject({ productId, variantId });
     expect(finish).toHaveBeenCalledWith(operationId, expect.objectContaining({ settled: true, actualCredits: 2 }));
     expect(JSON.stringify(vi.mocked(console.info).mock.calls)).not.toContain("data:image");

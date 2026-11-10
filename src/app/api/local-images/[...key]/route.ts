@@ -23,7 +23,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ key
     }
     const stored = await storage.read(key);
     return new NextResponse(stored.body, {
-      headers: { "Content-Type": stored.contentType, "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" },
+      headers: { "Content-Type": stored.contentType, "X-Content-Type-Options": "nosniff", "Cache-Control": "private, no-store", Vary: "Cookie" },
     });
   } catch (error) {
     if (error instanceof ZodError || (error instanceof Error && "code" in error && error.code === "ENOENT")) {

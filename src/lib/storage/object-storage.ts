@@ -71,6 +71,8 @@ class S3ObjectStorage implements ObjectStorage {
         Key: input.key,
         Body: input.body,
         ContentType: input.contentType,
+        // Cache policy is not an authorization boundary; bucket privacy must be enforced separately.
+        CacheControl: "private, no-store, max-age=0",
       }),
     );
 
@@ -86,9 +88,10 @@ class S3ObjectStorage implements ObjectStorage {
 
   async read(key: string, signal?: AbortSignal) {
     const config = getStorageConfig();
-    const object = await this.client.send(new GetObjectCommand({ Bucket: config.bucket, Key: key }), { abortSignal: signal });
+    const readSignal = AbortSignal.any([AbortSignal.timeout(30000), ...(signal ? [signal] : [])]);
+    const object = await this.client.send(new GetObjectCommand({ Bucket: config.bucket, Key: key }), { abortSignal: readSignal });
     if (!object.Body || (object.ContentLength ?? 0) > 8 * 1024 * 1024) throw new Error("invalid_image");
-    const body = await readBoundedStream(object.Body.transformToWebStream(), 8 * 1024 * 1024, signal);
+    const body = await readBoundedStream(object.Body.transformToWebStream(), 8 * 1024 * 1024, readSignal);
     return { body, contentType: object.ContentType?.split(";", 1)[0] ?? "application/octet-stream" };
   }
 }
