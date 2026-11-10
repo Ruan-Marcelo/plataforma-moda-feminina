@@ -21,6 +21,7 @@ function actorFromSession(session: Session | null): AuthenticatedUser | null {
 
 export async function POST(request: Request, { params }: Params) {
   let uploadedKey: string | undefined;
+  let metadataCommitted = false;
   try {
     const actor = actorFromSession(await auth());
     requireCatalogEditor(actor);
@@ -51,13 +52,21 @@ export async function POST(request: Request, { params }: Params) {
     const key = createProductImageKey(id, "jpg");
     uploadedKey = key;
     const stored = await storage.put({ key, body: normalized.bytes, contentType: normalized.mimeType });
-    const nextOrder = await prisma.productImage.count({ where: { productId: id } });
-    const image = await prisma.productImage.create({ data: { productId: id, url: stored.url, storageKey: stored.key, alt: parsedMetadata.data.alt, sortOrder: nextOrder } });
-    await prisma.auditLog.create({ data: { actorId: actor!.id, action: "product.image.create", entity: "ProductImage", entityId: image.id } });
+    const image = await prisma.$transaction(async tx => {
+      const nextOrder = await tx.productImage.count({ where: { productId: id } });
+      const created = await tx.productImage.create({ data: { productId: id, url: stored.url, storageKey: stored.key, alt: parsedMetadata.data.alt, sortOrder: nextOrder } });
+      await tx.auditLog.create({ data: { actorId: actor!.id, action: "product.image.create", entity: "ProductImage", entityId: created.id } });
+      return created;
+    });
+    metadataCommitted = true;
     return NextResponse.json({ image }, { status: 201 });
   } catch (error) {
-    if (uploadedKey) {
-      try { await getObjectStorage().delete(uploadedKey); } catch { /* best effort cleanup */ }
+    if (uploadedKey && !metadataCommitted) {
+      try {
+        // A lost transaction response may still have committed. Never delete its image blindly.
+        const referenced = await prisma.productImage.findFirst({ where: { storageKey: uploadedKey }, select: { id: true } });
+        if (!referenced) await getObjectStorage().delete(uploadedKey);
+      } catch { /* Keep an uncertain object for reconciliation rather than break a committed image. */ }
     }
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof FittingImageError) return NextResponse.json({ error: "invalid_image" }, { status: 400 });

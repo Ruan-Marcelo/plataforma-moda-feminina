@@ -6,7 +6,8 @@ import { z } from "zod";
 import { auth } from "@/../auth";
 import { deleteProductForStaff, updateProductForStaff } from "@/features/products/admin-service";
 import { productInputSchema } from "@/features/products/validation";
-import { AuthenticationRequiredError, AuthorizationDeniedError } from "@/lib/auth/authorization";
+import { AuthenticationRequiredError, AuthorizationDeniedError, requireCatalogEditor } from "@/lib/auth/authorization";
+import { readBoundedJson, bodyLimitResponse } from "@/lib/security/request-body";
 import type { AuthenticatedUser } from "@/lib/auth/authorization";
 
 type Params = { params: Promise<{ id: string }> };
@@ -24,14 +25,16 @@ function isNotFound(error: unknown) {
 export async function PUT(request: Request, { params }: Params) {
   try {
     const actor = actorFromSession(await auth());
+    requireCatalogEditor(actor);
     const { id } = await params;
     const parsedId = productIdSchema.safeParse(id);
     if (!parsedId.success) return NextResponse.json({ error: "invalid_product_id" }, { status: 400 });
-    const parsed = productInputSchema.safeParse(await request.json().catch(() => null));
+    const parsed = productInputSchema.safeParse(await readBoundedJson(request));
     if (!parsed.success) return NextResponse.json({ error: "invalid_product" }, { status: 400 });
     const product = await updateProductForStaff(actor, parsedId.data, parsed.data);
     return NextResponse.json({ id: product.id, slug: product.slug });
   } catch (error) {
+    const limited = bodyLimitResponse(error); if (limited) return limited;
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof AuthorizationDeniedError) return NextResponse.json({ error: "forbidden" }, { status: 403 });
     if (isNotFound(error)) return NextResponse.json({ error: "not_found" }, { status: 404 });
@@ -42,14 +45,16 @@ export async function PUT(request: Request, { params }: Params) {
 export async function DELETE(request: Request, { params }: Params) {
   try {
     const actor = actorFromSession(await auth());
+    requireCatalogEditor(actor);
     const { id } = await params;
     const parsedId = productIdSchema.safeParse(id);
     if (!parsedId.success) return NextResponse.json({ error: "invalid_product_id" }, { status: 400 });
-    const body = await request.json().catch(() => null);
+    const body = await readBoundedJson(request);
     const confirmed = deleteConfirmationSchema.safeParse(body).success;
     const product = await deleteProductForStaff(actor, parsedId.data, confirmed);
     return NextResponse.json({ id: product.id });
   } catch (error) {
+    const limited = bodyLimitResponse(error); if (limited) return limited;
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof AuthorizationDeniedError) return NextResponse.json({ error: "forbidden" }, { status: 403 });
     if (error instanceof Error && error.message === "Deletion confirmation is required") return NextResponse.json({ error: "confirmation_required" }, { status: 400 });

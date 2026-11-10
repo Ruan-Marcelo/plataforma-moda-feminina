@@ -6,6 +6,7 @@ import { z } from "zod";
 import { auth } from "@/../auth";
 import { AuthenticationRequiredError, AuthorizationDeniedError, requireCatalogEditor, type AuthenticatedUser } from "@/lib/auth/authorization";
 import { prisma } from "@/lib/db/prisma";
+import { readBoundedJson, bodyLimitResponse } from "@/lib/security/request-body";
 
 const taxonomyInputSchema = z.object({
   kind: z.enum(["category", "collection"]),
@@ -35,14 +36,18 @@ export async function POST(request: Request) {
   try {
     const actor = actorFromSession(await auth());
     requireCatalogEditor(actor);
-    const parsed = taxonomyInputSchema.safeParse(await request.json().catch(() => null));
+    const parsed = taxonomyInputSchema.safeParse(await readBoundedJson(request));
     if (!parsed.success) return NextResponse.json({ error: "invalid_taxonomy" }, { status: 400 });
-    const item = parsed.data.kind === "category"
-      ? await prisma.category.create({ data: { name: parsed.data.name, slug: parsed.data.slug } })
-      : await prisma.collection.create({ data: { name: parsed.data.name, slug: parsed.data.slug, description: parsed.data.description } });
-    await prisma.auditLog.create({ data: { actorId: actor!.id, action: `taxonomy.${parsed.data.kind}.create`, entity: parsed.data.kind === "category" ? "Category" : "Collection", entityId: item.id } });
+    const item = await prisma.$transaction(async tx => {
+      const created = parsed.data.kind === "category"
+        ? await tx.category.create({ data: { name: parsed.data.name, slug: parsed.data.slug } })
+        : await tx.collection.create({ data: { name: parsed.data.name, slug: parsed.data.slug, description: parsed.data.description } });
+      await tx.auditLog.create({ data: { actorId: actor!.id, action: `taxonomy.${parsed.data.kind}.create`, entity: parsed.data.kind === "category" ? "Category" : "Collection", entityId: created.id } });
+      return created;
+    });
     return NextResponse.json({ item }, { status: 201 });
   } catch (error) {
+    const limited = bodyLimitResponse(error); if (limited) return limited;
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof AuthorizationDeniedError) return NextResponse.json({ error: "forbidden" }, { status: 403 });
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") return NextResponse.json({ error: "slug_already_exists" }, { status: 409 });

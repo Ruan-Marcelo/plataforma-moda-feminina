@@ -17,8 +17,10 @@ export async function DELETE(_request: Request, { params }: Params) {
     const image = await prisma.productImage.findFirst({ where: { id: imageId, productId: id } });
     if (!image) return NextResponse.json({ error: "not_found" }, { status: 404 });
     if (image.storageKey) await getObjectStorage().delete(image.storageKey);
-    await prisma.productImage.delete({ where: { id: image.id } });
-    await prisma.auditLog.create({ data: { actorId: actor!.id, action: "product.image.delete", entity: "ProductImage", entityId: image.id } });
+    await prisma.$transaction(async tx => {
+      await tx.productImage.delete({ where: { id: image.id } });
+      await tx.auditLog.create({ data: { actorId: actor!.id, action: "product.image.delete", entity: "ProductImage", entityId: image.id } });
+    });
     return NextResponse.json({ id: image.id });
   } catch (error) {
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });

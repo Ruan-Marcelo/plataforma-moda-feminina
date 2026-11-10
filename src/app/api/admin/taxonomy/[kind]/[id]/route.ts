@@ -19,9 +19,11 @@ export async function DELETE(_request: Request, { params }: Params) {
     const { kind, id } = await params;
     const parsedKind = kindSchema.safeParse(kind);
     if (!parsedKind.success || !z.string().cuid().safeParse(id).success) return NextResponse.json({ error: "invalid_taxonomy_id" }, { status: 400 });
-    if (parsedKind.data === "category") await prisma.category.delete({ where: { id } });
-    else await prisma.collection.delete({ where: { id } });
-    await prisma.auditLog.create({ data: { actorId: actor!.id, action: `taxonomy.${parsedKind.data}.delete`, entity: parsedKind.data === "category" ? "Category" : "Collection", entityId: id } });
+    await prisma.$transaction(async tx => {
+      if (parsedKind.data === "category") await tx.category.delete({ where: { id } });
+      else await tx.collection.delete({ where: { id } });
+      await tx.auditLog.create({ data: { actorId: actor!.id, action: `taxonomy.${parsedKind.data}.delete`, entity: parsedKind.data === "category" ? "Category" : "Collection", entityId: id } });
+    });
     return NextResponse.json({ id });
   } catch (error) {
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });

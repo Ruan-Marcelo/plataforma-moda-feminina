@@ -5,7 +5,8 @@ import { auth } from "@/../auth";
 import { canEditCatalog, createProductForStaff } from "@/features/products/admin-service";
 import { listAdminProducts } from "@/features/products/repository";
 import { productInputSchema } from "@/features/products/validation";
-import { AuthenticationRequiredError, AuthorizationDeniedError } from "@/lib/auth/authorization";
+import { AuthenticationRequiredError, AuthorizationDeniedError, requireCatalogEditor } from "@/lib/auth/authorization";
+import { readBoundedJson, bodyLimitResponse } from "@/lib/security/request-body";
 import type { AuthenticatedUser } from "@/lib/auth/authorization";
 
 const limitSchema = z.coerce.number().int().min(1).max(100).default(100);
@@ -49,12 +50,14 @@ export async function POST(request: Request) {
   try {
     const session = await auth();
     const actor: AuthenticatedUser | null = session?.user?.id && session.user.role ? { id: session.user.id, role: session.user.role } : null;
-    const body = await request.json().catch(() => null);
+    requireCatalogEditor(actor);
+    const body = await readBoundedJson(request);
     const parsed = productInputSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ error: "invalid_product" }, { status: 400 });
     const product = await createProductForStaff(actor, parsed.data);
     return NextResponse.json({ id: product.id, slug: product.slug }, { status: 201 });
   } catch (error) {
+    const limited = bodyLimitResponse(error); if (limited) return limited;
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof AuthorizationDeniedError) return NextResponse.json({ error: "forbidden" }, { status: 403 });
     return NextResponse.json({ error: "product_unavailable" }, { status: 503 });

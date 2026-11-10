@@ -79,14 +79,14 @@ export async function listRelatedPublishedProducts(productId: string, categoryId
   return prisma.product.findMany({ where: { status: "PUBLISHED", id: { not: productId }, OR: relationFilters }, include: productInclude, orderBy: { createdAt: "desc" }, take: Math.min(Math.max(take, 1), 8) });
 }
 
-export async function createProduct(input: ProductInput) {
-  return prisma.product.create({ data: { name: input.name, slug: input.slug, description: input.description, priceCents: input.priceCents, status: input.status, categoryId: input.categoryId, collectionId: input.collectionId, variants: { create: input.variants } }, include: productInclude });
+export async function createProduct(input: ProductInput, db: Prisma.TransactionClient = prisma) {
+  return db.product.create({ data: { name: input.name, slug: input.slug, description: input.description, priceCents: input.priceCents, status: input.status, categoryId: input.categoryId, collectionId: input.collectionId, variants: { create: input.variants } }, include: productInclude });
 }
 
-export async function updateProduct(id: string, input: ProductInput) {
-  return prisma.product.update({ where: { id }, data: { name: input.name, slug: input.slug, description: input.description, priceCents: input.priceCents, status: input.status, categoryId: input.categoryId, collectionId: input.collectionId, variants: { deleteMany: {}, create: input.variants } }, include: productInclude });
+export async function updateProduct(id: string, input: ProductInput, db: Prisma.TransactionClient = prisma) {
+  return db.product.update({ where: { id }, data: { name: input.name, slug: input.slug, description: input.description, priceCents: input.priceCents, status: input.status, categoryId: input.categoryId, collectionId: input.collectionId, variants: { deleteMany: {}, create: input.variants } }, include: productInclude });
 }
 
-export async function deleteProduct(id: string) {
-  return prisma.product.delete({ where: { id } });
+export async function deleteProduct(id: string, db: Prisma.TransactionClient = prisma) {
+  return db.product.delete({ where: { id } });
 }
