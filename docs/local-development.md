@@ -11,7 +11,7 @@
 ## Iniciar
 
 1. Mantenha o serviço PostgreSQL iniciado.
-2. Execute `npm run dev -- --hostname 127.0.0.1` na pasta do projeto.
+2. Execute `node node_modules/next/dist/bin/next dev --hostname 127.0.0.1` na pasta do projeto.
 3. Abra `http://localhost:3000`. O login está em `/login`, e o painel em `/admin`.
 
 O `.env` contém `DATABASE_URL`, `AUTH_SECRET` e as credenciais administrativas locais. Não o versione nem compartilhe seu conteúdo. Para atualizar a conta administrativa conscientemente, execute `npm run db:provision-admin`; o comando lê esse arquivo e exige confirmação YES e senha de pelo menos 12 caracteres. Reinicie o servidor após alterar a conexão do banco, para renovar o Prisma Client em memória.
