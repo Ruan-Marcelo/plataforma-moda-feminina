@@ -10,6 +10,7 @@ import { createProductImageKey, getObjectStorage, ObjectStorageNotConfiguredErro
 import { hasSupportedImageSignature, maxVirtualTryOnFileSize, supportedVirtualTryOnMimeTypes } from "@/features/virtual-fitting/validation";
 import { normalizeFittingImage, FittingImageError } from "@/features/virtual-fitting/server-image";
 import { BoundedStreamError, readBoundedStream } from "@/lib/security/bounded-stream";
+import { catalogImageUrl } from "@/lib/storage/catalog-image-url";
 
 type Params = { params: Promise<{ id: string }> };
 const imageMetadataSchema = z.object({ alt: z.string().trim().min(1).max(160) });
@@ -84,8 +85,8 @@ export async function GET(_request: Request, { params }: Params) {
     requireCatalogEditor(actor);
     const { id } = await params;
     if (!z.string().cuid().safeParse(id).success) return NextResponse.json({ error: "invalid_product_id" }, { status: 400 });
-    const images = await prisma.productImage.findMany({ where: { productId: id }, orderBy: { sortOrder: "asc" }, select: { id: true, url: true, alt: true, sortOrder: true } });
-    return NextResponse.json({ items: images });
+    const images = await prisma.productImage.findMany({ where: { productId: id }, orderBy: { sortOrder: "asc" }, select: { id: true, url: true, storageKey: true, alt: true, sortOrder: true } });
+    return NextResponse.json({ items: images.map(({ storageKey, ...image }) => ({ ...image, url: catalogImageUrl({ ...image, storageKey }) })) });
   } catch (error) {
     if (error instanceof AuthenticationRequiredError) return NextResponse.json({ error: "authentication_required" }, { status: 401 });
     if (error instanceof AuthorizationDeniedError) return NextResponse.json({ error: "forbidden" }, { status: 403 });

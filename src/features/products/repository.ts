@@ -1,6 +1,7 @@
 // RUAN MARCELO RAMACIOTI LUZ
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
+import { withCatalogImageUrls } from "@/lib/storage/catalog-image-url";
 import { catalogQuerySchema, type CatalogQuery, type ProductInput } from "./validation";
 
 const productInclude = { images: { orderBy: { sortOrder: "asc" as const } }, variants: true, measurement: true, category: true, collection: true } satisfies Prisma.ProductInclude;
@@ -31,16 +32,17 @@ export async function listPublishedProducts(input: Partial<CatalogQuery> = {}) {
     prisma.product.findMany({ where, include: productInclude, orderBy, skip: (query.page - 1) * query.pageSize, take: query.pageSize }),
     prisma.product.count({ where }),
   ]);
-  return { items, total, page: query.page, pageSize: query.pageSize, pageCount: Math.ceil(total / query.pageSize), query };
+  return { items: items.map(withCatalogImageUrls), total, page: query.page, pageSize: query.pageSize, pageCount: Math.ceil(total / query.pageSize), query };
 }
 
 export async function listAdminProducts(limit = 100) {
   const take = Math.min(Math.max(Math.trunc(limit), 1), 100);
-  return prisma.product.findMany({
+  const products = await prisma.product.findMany({
     include: productInclude,
     orderBy: { updatedAt: "desc" },
     take,
   });
+  return products.map(withCatalogImageUrls);
 }
 
 export async function listAdminTaxonomy() {
@@ -60,15 +62,18 @@ export async function listPublishedCategories() {
 }
 
 export async function findPublishedProductBySlug(slug: string) {
-  return prisma.product.findFirst({ where: { slug, status: "PUBLISHED" }, include: productInclude });
+  const product = await prisma.product.findFirst({ where: { slug, status: "PUBLISHED" }, include: productInclude });
+  return product ? withCatalogImageUrls(product) : null;
 }
 
 export async function findPublishedProductById(id: string) {
-  return prisma.product.findFirst({ where: { id, status: "PUBLISHED" }, include: productInclude });
+  const product = await prisma.product.findFirst({ where: { id, status: "PUBLISHED" }, include: productInclude });
+  return product ? withCatalogImageUrls(product) : null;
 }
 
 export async function findPublishedProductsByIds(ids: string[]) {
-  return prisma.product.findMany({ where: { id: { in: ids }, status: "PUBLISHED" }, include: productInclude, take: 100 });
+  const products = await prisma.product.findMany({ where: { id: { in: ids }, status: "PUBLISHED" }, include: productInclude, take: 100 });
+  return products.map(withCatalogImageUrls);
 }
 
 export async function listRelatedPublishedProducts(productId: string, categoryId?: string | null, collectionId?: string | null, take = 4) {
@@ -76,7 +81,8 @@ export async function listRelatedPublishedProducts(productId: string, categoryId
   if (categoryId) relationFilters.push({ categoryId });
   if (collectionId) relationFilters.push({ collectionId });
   if (!relationFilters.length) return [];
-  return prisma.product.findMany({ where: { status: "PUBLISHED", id: { not: productId }, OR: relationFilters }, include: productInclude, orderBy: { createdAt: "desc" }, take: Math.min(Math.max(take, 1), 8) });
+  const products = await prisma.product.findMany({ where: { status: "PUBLISHED", id: { not: productId }, OR: relationFilters }, include: productInclude, orderBy: { createdAt: "desc" }, take: Math.min(Math.max(take, 1), 8) });
+  return products.map(withCatalogImageUrls);
 }
 
 export async function createProduct(input: ProductInput, db: Prisma.TransactionClient = prisma) {

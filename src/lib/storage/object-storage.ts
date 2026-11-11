@@ -40,15 +40,13 @@ function getStorageConfig() {
   if (
     !env.S3_BUCKET ||
     !env.S3_ACCESS_KEY_ID ||
-    !env.S3_SECRET_ACCESS_KEY ||
-    !env.S3_PUBLIC_BASE_URL
+    !env.S3_SECRET_ACCESS_KEY
   ) {
     throw new ObjectStorageNotConfiguredError();
   }
 
   return {
     bucket: env.S3_BUCKET,
-    publicBaseUrl: env.S3_PUBLIC_BASE_URL.replace(/\/$/, ""),
   };
 }
 
@@ -76,7 +74,7 @@ class S3ObjectStorage implements ObjectStorage {
       }),
     );
 
-    return { key: input.key, url: `${config.publicBaseUrl}/${input.key}` };
+    return { key: input.key, url: `/api/catalog-images/${input.key}` };
   }
 
   async delete(key: string): Promise<void> {

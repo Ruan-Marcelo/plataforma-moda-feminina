@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
         { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
       ] },
-      ...["/api/admin/:path*", "/api/auth/:path*", "/api/virtual-fitting", "/api/local-images/:path*", "/api/favorites"].map(source => ({ source, headers: privateHeaders })),
+      ...["/api/admin/:path*", "/api/auth/:path*", "/api/virtual-fitting", "/api/local-images/:path*", "/api/catalog-images/:path*", "/api/favorites"].map(source => ({ source, headers: privateHeaders })),
     ];
   },
 };

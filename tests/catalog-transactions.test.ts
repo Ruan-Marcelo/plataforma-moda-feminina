@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const { txCreate, txUpdate, txDelete, log, rootCreate, rootUpdate, rootDelete, transaction } = vi.hoisted(() => ({ txCreate: vi.fn(), txUpdate: vi.fn(), txDelete: vi.fn(), log: vi.fn(), rootCreate: vi.fn(), rootUpdate: vi.fn(), rootDelete: vi.fn(), transaction: vi.fn() }));
 vi.mock("@/lib/db/prisma", () => {
-  const tx = { product: { create: txCreate, update: txUpdate, delete: txDelete }, auditLog: { create: log } };
+  const tx = { product: { create: txCreate, update: txUpdate, delete: txDelete }, productImage: { findMany: vi.fn().mockResolvedValue([]) }, auditLog: { create: log } };
   transaction.mockImplementation(async callback => callback(tx));
   return { prisma: { product: { create: rootCreate, update: rootUpdate, delete: rootDelete }, auditLog: { create: vi.fn() }, $transaction: transaction } };
 });
+vi.mock("@/lib/storage/deletion-tasks", () => ({ enqueueStorageDeletions: vi.fn().mockResolvedValue([]), attemptStorageDeletions: vi.fn().mockResolvedValue(undefined) }));
 import { createProductForStaff, updateProductForStaff, deleteProductForStaff } from "@/features/products/admin-service";
 const id = "cm123456789012345678901234";
 const actor = { id, role: "ADMIN" as const };
