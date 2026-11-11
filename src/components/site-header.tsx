@@ -1,7 +1,6 @@
 // RUAN MARCELO RAMACIOTI LUZ
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { storeConfig } from "@/config/store";
@@ -32,7 +31,6 @@ export function SiteHeader() {
       <a href="#page-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-white focus:p-4 focus:text-wine">Pular para o conteúdo</a>
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 lg:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-3 rounded focus-visible:ring-2 focus-visible:ring-wine focus-visible:ring-offset-4" aria-label={`${storeConfig.name}, página inicial`} onClick={() => setOpen(false)}>
-          <Image src="/brand/belin-logo.jpeg" alt="" width={48} height={48} className="h-12 w-12 rounded-full object-cover" priority />
           <span className="font-display text-3xl tracking-[0.08em] text-wine">{storeConfig.name}</span>
         </Link>
 
