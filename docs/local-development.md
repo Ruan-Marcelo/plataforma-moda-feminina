@@ -3,7 +3,7 @@
 ## Preparação realizada
 
 - Dependências restauradas pelo `package-lock.json` com `npm ci` e Prisma Client gerado.
-- PostgreSQL 18 em `localhost:5432`; banco separado `belin_local` criado e quatro migrations aplicadas com `npx prisma migrate deploy`.
+- PostgreSQL em `localhost:5432`; banco separado `belin_local` e migrations aplicadas com `npx prisma migrate deploy`.
 - Administrador provisionado com os valores reais do `.env`; login, papel ADMIN, painel, API protegida e exportação CSV verificados no navegador.
 - Catálogo conectado ao PostgreSQL. Na etapa de detalhes das peças, três exemplos demonstrativos foram gravados a pedido do usuário, com ilustrações identificadas e preços de exemplo.
 - Chromium instalado para Playwright.
@@ -16,13 +16,15 @@
 
 O `.env` contém `DATABASE_URL`, `AUTH_SECRET` e as credenciais administrativas locais. Não o versione nem compartilhe seu conteúdo. Para atualizar a conta administrativa conscientemente, execute `npm run db:provision-admin`; o comando lê esse arquivo e exige confirmação YES e senha de pelo menos 12 caracteres. Reinicie o servidor após alterar a conexão do banco, para renovar o Prisma Client em memória.
 
+O projeto usa Prisma 7 e Node `^20.19`, `^22.12` ou `>=24`. Em uma instalação nova, execute `npm ci`, `npm run db:generate` e, para o banco escolhido conscientemente, `npx prisma migrate deploy`. Não use o banco da loja para testes destrutivos.
+
 ## Imagens
 
 Use `STORAGE_DRIVER=local` no `.env` para uploads reais em disco durante `npm run dev`. Imagens de catálogo ficam em `.local-data/catalog-images/`, fora do histórico. Preserve essa pasta junto ao backup do banco. Em produção, configure S3 conforme `docs/storage.md`.
 
 ## Integrações externas
 
-O provador existente depende de FASHN e não funciona offline. Sem chave real, permanece explicitamente não configurado. Google/Apple e WhatsApp também dependem de serviços externos e de configuração real; não são necessários para acessar o painel por e-mail/senha. Nenhuma credencial desses serviços é inventada na preparação local.
+O provador existente depende da API remota FASHN e não funciona offline. Sem chave real, permanece explicitamente não configurado. Há uma avaliação em andamento de modelo gratuito local, ainda não integrado nem validado: veja `docs/ia-gratuita-local.md`. Google/Apple e WhatsApp também dependem de serviços externos e de configuração real; não são necessários para acessar o painel por e-mail/senha. Nenhuma credencial desses serviços é inventada na preparação local.
 
 ## Verificações
 

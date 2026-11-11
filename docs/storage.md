@@ -1,15 +1,21 @@
 # Armazenamento de imagens
 
-Na auditoria de 2026-11-09, novos uploads administrativos passaram a validar o corpo efetivamente lido e decodificar a imagem inteira, salvando JPEG sem metadados; imagens já existentes não foram regravadas. A rota local exige ADMIN/EDITOR para peças não publicadas, enquanto imagens publicadas continuam públicas. Miniaturas administrativas permanecem fora do otimizador público. A estratégia S3 usa sua base pública configurada e precisa de revisão própria para garantir privacidade de rascunhos; isso não foi certificado pelo ajuste local. Ver `docs/quality-audit-2026-11-09.md`.
+Imagens de catálogo recebidas pelo painel são validadas, decodificadas integralmente, normalizadas para JPEG e armazenadas sem metadados. A chave tem o formato `products/{productId}/{uuid}.jpg`. Fotografias pessoais do provador não passam pelo armazenamento do catálogo.
 
-O provador real lê a imagem da peça por chave autorizada via `ObjectStorage.read`, sem fazer fetch de URLs arbitrárias. Fotos pessoais e resultados não passam por esse storage. O servidor prepara cópias transitórias em memória e envia ambas as imagens em base64. Ver ADR 0007.
+O backend entrega objetos próprios pela rota `/api/catalog-images/...`: ela valida a chave e a referência no banco, permite acesso público apenas para peças publicadas e exige ADMIN ou EDITOR para rascunhos e itens arquivados. As respostas usam `private, no-store`. URLs antigas que possuem `storageKey` são convertidas no momento da leitura, sem regravar dados antigos. Recursos externos sem chave permanecem sob responsabilidade da origem. A rota local antiga continua disponível por compatibilidade.
 
-Em desenvolvimento, `STORAGE_DRIVER=local` habilita armazenamento em `.local-data/catalog-images/`, ignorado pelo Git. A aplicação entrega essas imagens pela rota local somente fora de produção. Veja `docs/local-development.md` e a ADR 0004. S3 permanece o padrão e a opção de produção descrita abaixo.
+## Local
 
-As imagens de catálogo são enviadas pelo backend para um serviço compatível com S3. O navegador nunca recebe as credenciais do bucket. A chave do objeto é criada no servidor no formato `products/{productId}/{uuid}.{ext}` e é registrada em `ProductImage.storageKey` para permitir exclusão segura.
+Em desenvolvimento, `STORAGE_DRIVER=local` armazena imagens em `.local-data/catalog-images/`, que deve acompanhar os backups do banco e não deve ser versionado. Essa implementação fica indisponível em produção. Imagens de demonstração sem chave continuam servidas pelos arquivos públicos do projeto.
 
-O endpoint administrativo valida MIME, assinatura real do arquivo e limite de 8 MiB antes do upload. A configuração é opcional em desenvolvimento; quando ausente, o endpoint retorna `storage_not_configured` e não cria uma imagem falsa.
+## S3 compatível
 
-Configure `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` e `S3_PUBLIC_BASE_URL`. Para MinIO, Cloudflare R2 ou outro serviço compatível, informe também `S3_ENDPOINT` e, se necessário, `S3_FORCE_PATH_STYLE=true`.
+Configure `STORAGE_DRIVER=s3`, `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID` e `S3_SECRET_ACCESS_KEY`; para serviços compatíveis, configure também endpoint e path-style quando necessário. `S3_PUBLIC_BASE_URL` não é necessário para novos uploads. O servidor usa credenciais para ler objetos e não precisa expor a URL do bucket.
 
-O bucket deve permitir leitura pública somente dos objetos de catálogo, sem permitir listagem ou escrita pública. As credenciais devem possuir apenas as permissões de objeto necessárias. Resultados pessoais do provador virtual não são armazenados por este módulo.
+**A rota da aplicação não altera a política da conta.** Antes de usar S3, configure bloqueio de acesso público e objetos privados no próprio fornecedor, revise URLs públicas antigas e caches externos e teste a configuração real. Objetos que já foram expostos por um bucket público continuam acessíveis por sua URL direta enquanto a política externa os permitir. Não há S3 configurado ou verificado neste computador.
+
+## Exclusões e recuperação
+
+Excluir uma imagem ou produto registra, na mesma transação que exclui os metadados, uma tarefa persistente de limpeza. Depois do commit a aplicação tenta remover o objeto. Se houver falha, a tarefa mantém código técnico sem fotografias ou credenciais e pode ser repetida; uma referência ativa impede a exclusão. As tarefas são limitadas a oito tentativas e usam uma concessão temporária para execução concorrente. O alvo do armazenamento é identificado por hash, evitando aplicar tarefas de um bucket ou diretório em outro.
+
+`npm run db:reconcile-storage` apenas conta tarefas pendentes. `npm run db:reconcile-storage -- --execute` tenta até 20 tarefas elegíveis no armazenamento atualmente configurado; planeje execução periódica e monitoramento antes de produção. Tarefas esgotadas, chaves antigas inválidas e objetos órfãos anteriores devem ser investigados manualmente. Se uma falha acontecer antes de o banco receber a tarefa de um upload, o objeto ainda pode ficar órfão; não há atomicidade distribuída nem varredura automática de objetos antigos.
