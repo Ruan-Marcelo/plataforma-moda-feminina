@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1250" viewBox="0 0 1000 1250">
+  <rect width="1000" height="1250" fill="#f4ebe1"/>
+  <text x="500" y="120" text-anchor="middle" font-family="Georgia,serif" font-size="44" fill="#8d263b">BÉLIN · DEMONSTRAÇÃO</text>
+  <path d="M350 315 650 315 785 955 Q500 1015 215 955Z" fill="#2a2020"/>
+  <path d="M350 360 650 360M500 315 500 975M395 380 335 950M605 380 665 950" fill="none" stroke="#564546" stroke-width="7"/>
+  <path d="M500 340 500 460" stroke="#e8d8c4" stroke-width="4"/>
+  <text x="500" y="1090" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" fill="#6d5e5e">Vista posterior · ilustração de exemplo</text>
+  <text x="500" y="1140" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#6d5e5e">Não representa uma peça comercial real</text>
+</svg>
