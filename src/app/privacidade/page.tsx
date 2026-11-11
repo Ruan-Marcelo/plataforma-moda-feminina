@@ -1,15 +1,16 @@
 // RUAN MARCELO RAMACIOTI LUZ
 import Link from "next/link";
-import { storeConfig } from "@/config/store";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 
 export const metadata = { title: "Privacidade", description: "Informações sobre privacidade e tratamento de dados na BÉLIN." };
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-cream px-5 py-12 md:px-8 md:py-20">
-      <div className="mx-auto max-w-3xl">
-        <Link href="/" className="text-sm text-wine">← Voltar para {storeConfig.name}</Link>
-        <p className="mt-16 text-xs uppercase tracking-[0.3em] text-wine">Privacidade</p>
+    <main className="min-h-screen bg-cream">
+      <SiteHeader />
+      <div id="page-content" tabIndex={-1} className="mx-auto max-w-3xl px-4 py-8 md:px-8 md:py-12">
+        <p className="text-xs uppercase tracking-[0.3em] text-wine">Privacidade</p>
         <h1 className="mt-4 font-display text-5xl text-wine md:text-7xl">Sua privacidade importa.</h1>
         <p className="mt-6 leading-7 text-stone-700">Esta página apresenta a estrutura de tratamento de dados prevista para a vitrine BÉLIN. Ela ainda precisa ser revisada e aprovada pelo responsável jurídico antes da publicação.</p>
         <div className="mt-10 space-y-8 rounded-2xl border border-nude bg-white p-6 md:p-8">
@@ -19,6 +20,7 @@ export default function PrivacyPage() {
           <section><h2 className="font-display text-3xl text-wine">Contato</h2><p className="mt-3 text-sm leading-6 text-stone-600">Para dúvidas ou solicitações relacionadas a dados pessoais, o canal oficial deverá ser informado pela loja antes da publicação.</p><Link href="/contato" className="mt-3 inline-flex min-h-12 items-center text-sm text-wine underline">Canais da loja</Link></section>
         </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }
