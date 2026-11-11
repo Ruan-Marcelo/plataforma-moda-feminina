@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../src/lib/db/client";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { reserveFittingOperation } from "@/features/virtual-fitting/operation-repository";
 import { fittingConsentVersion } from "@/features/virtual-fitting/contracts";
@@ -11,7 +12,7 @@ beforeAll(async () => {
   if (!databaseUrl) return;
   const url = new URL(databaseUrl);
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Use only a dedicated local E2E database");
-  db = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  db = createDatabaseClient(databaseUrl);
 });
 afterEach(async () => { if (db) await db.virtualFittingOperation.deleteMany({ where: { requestId: { in: requests.splice(0) } } }); });
 afterAll(async () => { await db?.$disconnect(); });

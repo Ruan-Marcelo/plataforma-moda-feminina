@@ -1,11 +1,11 @@
 // RUAN MARCELO RAMACIOTI LUZ
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -159,4 +159,19 @@ model VirtualFittingOperation {
   @@index([ownerHash, createdAt])
   @@index([settledAt])
   @@index([expiresAt])
+}
+
+// Durable cleanup instructions, committed with metadata deletion. No personal images.
+model StorageDeletionTask {
+  id            String   @id @default(cuid())
+  storageKey    String   @unique
+  driver        String
+  attempts      Int      @default(0)
+  nextAttemptAt DateTime @default(now())
+  leaseToken    String?
+  completedAt   DateTime?
+  errorCode     String?
+  createdAt     DateTime @default(now())
+
+  @@index([driver, completedAt, nextAttemptAt])
 }

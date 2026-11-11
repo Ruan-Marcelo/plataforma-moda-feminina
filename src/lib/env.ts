@@ -1,21 +1,25 @@
 // RUAN MARCELO RAMACIOTI LUZ
 import { z } from "zod";
 
+const emptyAsUndefined = (value: unknown) => typeof value === "string" && value.trim() === "" ? undefined : value;
+const optionalUrl = z.preprocess(emptyAsUndefined, z.string().url().optional());
+const optionalNonEmpty = z.preprocess(emptyAsUndefined, z.string().min(1).optional());
+
 const serverEnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  DATABASE_URL: z.string().url().optional(),
+  DATABASE_URL: optionalUrl,
   NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
   STORE_NAME: z.string().trim().min(1).max(120).default("BÉLIN"),
   STORE_SHOW_PRICES: z.enum(["true", "false"]).default("true").transform(value => value === "true"),
-  STORE_WHATSAPP_NUMBER: z.string().regex(/^[1-9]\d{9,14}$/).optional(),
+  STORE_WHATSAPP_NUMBER: z.preprocess(emptyAsUndefined, z.string().regex(/^[1-9]\d{9,14}$/).optional()),
   STORE_INSTAGRAM_URL: z.string().url().refine(value => { const url = new URL(value); return url.protocol === "https:" && ["instagram.com", "www.instagram.com"].includes(url.hostname) && !url.username && !url.password; }).default("https://instagram.com/usebelin"),
-  STORE_SERVICE_INFORMATION: z.string().trim().min(1).max(2000).optional(),
-  AUTH_SECRET: z.string().min(32).optional(),
-  AUTH_GOOGLE_ID: z.string().min(1).optional(),
-  AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
-  AUTH_APPLE_ID: z.string().min(1).optional(),
-  AUTH_APPLE_SECRET: z.string().min(1).optional(),
-  FASHN_API_KEY: z.string().min(1).optional(),
+  STORE_SERVICE_INFORMATION: z.preprocess(emptyAsUndefined, z.string().trim().min(1).max(2000).optional()),
+  AUTH_SECRET: z.preprocess(emptyAsUndefined, z.string().min(32).optional()),
+  AUTH_GOOGLE_ID: optionalNonEmpty,
+  AUTH_GOOGLE_SECRET: optionalNonEmpty,
+  AUTH_APPLE_ID: optionalNonEmpty,
+  AUTH_APPLE_SECRET: optionalNonEmpty,
+  FASHN_API_KEY: optionalNonEmpty,
   FASHN_MODEL: z.literal("tryon-max").default("tryon-max"),
   FASHN_SPENDING_APPROVED: z.enum(["true", "false"]).default("false").transform(value => value === "true"),
   FASHN_DAILY_CREDIT_LIMIT: z.coerce.number().int().min(0).max(1000).default(0),
@@ -23,13 +27,13 @@ const serverEnvSchema = z.object({
   FASHN_MAX_CONCURRENT: z.coerce.number().int().min(1).max(6).default(2),
   VIRTUAL_FITTING_ENABLED: z.enum(["true", "false"]).default("false").transform(value => value === "true"),
   STORAGE_DRIVER: z.enum(["s3", "local"]).default("s3"),
-  S3_ENDPOINT: z.string().url().optional(),
+  S3_ENDPOINT: optionalUrl,
   S3_REGION: z.string().min(1).default("us-east-1"),
-  S3_BUCKET: z.string().min(1).optional(),
-  S3_ACCESS_KEY_ID: z.string().min(1).optional(),
-  S3_SECRET_ACCESS_KEY: z.string().min(1).optional(),
-  S3_PUBLIC_BASE_URL: z.string().url().optional(),
-  S3_FORCE_PATH_STYLE: z.coerce.boolean().default(false),
+  S3_BUCKET: optionalNonEmpty,
+  S3_ACCESS_KEY_ID: optionalNonEmpty,
+  S3_SECRET_ACCESS_KEY: optionalNonEmpty,
+  S3_PUBLIC_BASE_URL: optionalUrl,
+  S3_FORCE_PATH_STYLE: z.enum(["true", "false"]).default("false").transform(value => value === "true"),
 });
 
 export const env = serverEnvSchema.parse({

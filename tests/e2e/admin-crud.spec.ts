@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { hash } from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../../src/lib/db/client";
 import { expect, test } from "@playwright/test";
 import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
 const databaseUrl = process.env.E2E_DATABASE_URL;
@@ -11,7 +12,7 @@ test.beforeAll(async () => {
   if (!databaseUrl) return;
   const url = new URL(databaseUrl);
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Unsafe database");
-  db = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  db = createDatabaseClient(databaseUrl);
   userId = (await db.user.create({ data: { email, role: "ADMIN", passwordHash: await hash(password, 12) } })).id;
 });
 test.afterAll(async () => { if (!db) return; await db.product.deleteMany({ where: { slug } }); await db.auditLog.deleteMany({ where: { actorId: userId } }); await db.user.delete({ where: { id: userId } }); await db.$disconnect(); });

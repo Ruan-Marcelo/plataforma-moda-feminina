@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { hash } from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../../src/lib/db/client";
 import { expect, test } from "@playwright/test";
 import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
 
@@ -29,7 +30,7 @@ test.beforeAll(async () => {
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) {
     throw new Error("Use somente um banco local dedicado belin_product_e2e_*. Não execute contra dados da loja.");
   }
-  prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  prisma = createDatabaseClient(databaseUrl);
   const category = await prisma.category.create({ data: { name: "Categoria E2E", slug: `e2e-${marker}` } });
   categoryId = category.id;
   product = await prisma.product.create({ data: {

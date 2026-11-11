@@ -1,7 +1,7 @@
 // RUAN MARCELO RAMACIOTI LUZ
-import { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../src/lib/db/client";
 
-const prisma = new PrismaClient();
+const prisma = createDatabaseClient();
 
 async function main() {
   if (process.env.NODE_ENV === "production") throw new Error("O seed de desenvolvimento não pode ser executado em produção.");

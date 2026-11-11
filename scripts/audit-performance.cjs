@@ -1,11 +1,12 @@
 const { chromium } = require('@playwright/test');
 const { PrismaClient } = require('@prisma/client');
+const { PrismaPg } = require('@prisma/adapter-pg');
 const fs = require('node:fs');
 const path = require('node:path');
 
 // Local laboratory measurements only: no telemetry is added to the shipped application.
 async function main() {
-  const db = new PrismaClient();
+  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 5000 }) });
   const browser = await chromium.launch();
   const results = [];
   const base = process.env.AUDIT_BASE_URL || 'http://localhost:3200';

@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../../src/lib/db/client";
 import { expect, test } from "@playwright/test";
 import { favoritesStorageKey } from "../../src/features/favorites/contracts";
 import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
@@ -17,7 +18,7 @@ test.beforeAll(async () => {
   if (!databaseUrl) return;
   const url = new URL(databaseUrl);
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Unsafe test database");
-  prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  prisma = createDatabaseClient(databaseUrl);
   product = await prisma.product.create({ data: { name: `Favoritos & Bordô ${marker}`, slug: `favoritos-${marker}`, status: "PUBLISHED", variants: { create: { size: "M", color: "Bordô", available: true } } } }); ids.push(product.id);
   unavailable = await prisma.product.create({ data: { name: `Esgotada ${marker}`, slug: `esgotada-${marker}`, status: "PUBLISHED", variants: { create: { size: "P", color: "Preto", available: false } } } }); ids.push(unavailable.id);
   draft = await prisma.product.create({ data: { name: `Privada ${marker}`, slug: `privada-${marker}`, status: "DRAFT" } }); ids.push(draft.id);

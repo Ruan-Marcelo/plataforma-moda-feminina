@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../src/lib/db/client";
 
-const prisma = new PrismaClient();
+const prisma = createDatabaseClient();
 async function main() {
   const deleted = await prisma.virtualFittingOperation.deleteMany({ where: { expiresAt: { lte: new Date() } } });
   console.log(`Metadados expirados removidos: ${deleted.count}. Nenhuma fotografia é armazenada nesta tabela.`);

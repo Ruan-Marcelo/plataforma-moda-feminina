@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../../src/lib/db/client";
 import { expect, test, type Page, type Route } from "@playwright/test";
 import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
 
@@ -20,7 +21,7 @@ test.beforeAll(async () => {
   if (!databaseUrl) return;
   const url = new URL(databaseUrl);
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Use um banco de testes isolado belin_product_e2e_*");
-  prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  prisma = createDatabaseClient(databaseUrl);
   fixture = await readFile("public/brand/belin-logo.jpeg"); // Non-personal asset, never a customer's photograph.
   resultUrl = `data:image/jpeg;base64,${fixture.toString("base64")}`;
   const marker = randomUUID();

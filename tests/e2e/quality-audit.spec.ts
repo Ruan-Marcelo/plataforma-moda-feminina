@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { hash } from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { createDatabaseClient } from "../../src/lib/db/client";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { cookieConsentStorageKey } from "../../src/features/cookie-consent/consent";
@@ -18,7 +19,7 @@ test.beforeAll(async () => {
   if (!databaseUrl) return;
   const url = new URL(databaseUrl);
   if (!["localhost", "127.0.0.1"].includes(url.hostname) || !/^belin_product_e2e_[a-z0-9_]+$/.test(url.pathname.slice(1))) throw new Error("Unsafe database");
-  db = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+  db = createDatabaseClient(databaseUrl);
   userId = (await db.user.create({ data: { email, role: "ADMIN", passwordHash: await hash(password, 12) } })).id;
   categoryId = (await db.category.create({ data: { name: "Categoria de auditoria", slug: `audit-${suffix}` } })).id;
   product = await db.product.create({ data: { name: `Auditoria ${suffix}`, slug: `audit-${suffix}`, categoryId, status: "PUBLISHED", variants: { create: [{ color: "Bordô", size: "M", available: true }] } } });

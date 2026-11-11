@@ -1,9 +1,10 @@
 const { chromium, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
 const { PrismaClient } = require('@prisma/client');
+const { PrismaPg } = require('@prisma/adapter-pg');
 const fs = require('node:fs');
 async function main() {
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 5000 }) });
   const browser = await chromium.launch();
   const results = [];
   try {
